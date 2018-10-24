@@ -16,7 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DisplayRSS"></activity>
+        <activity android:name=".DisplayRSS" />
+
+        <provider
+            android:name=".MplrssContentProvider"
+            android:authorities="fr.cartman.respect.my.authority"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>
