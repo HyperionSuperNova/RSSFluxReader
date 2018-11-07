@@ -9,6 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class MplrssContentProvider extends ContentProvider {
     private Base base;
 
@@ -109,7 +114,34 @@ public class MplrssContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
+        SQLiteDatabase db = base.getReadableDatabase();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 1);
+        Date d = cal.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        //String currentDate = format.format(d);
+
+        selection = "date_choisi = ?";
+        String date_choix = "";
+        selectionArgs = new String []{date_choix};
+        Cursor cursor = db.query("rss", new String []{"date_choisi"}, selection, selectionArgs, null, null, null);
+
+        if(cursor.getCount() == 0){
+            return  -1;
+        }
+        cursor.moveToFirst();
+        date_choix =  cursor.getString(cursor.getColumnIndex("date_choisi"));
+
+        try {
+            Date databaseResult = format.parse(date_choix);
+            long diffDate = d.getTime() - databaseResult.getTime();
+            System.out.println("TEST::::" + diffDate);
+            if(diffDate > 3){
+                db.update("rss", null," = ?", new String [] {"date_choisi"});
+            }
+        }catch(ParseException p){}
         // TODO: Implement this to handle requests to update one or more rows.
+        // TODO: recuperer date actuelle checker si 3 mois diff avec date_choisi. Si oui mettre date_choisi à null
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }
