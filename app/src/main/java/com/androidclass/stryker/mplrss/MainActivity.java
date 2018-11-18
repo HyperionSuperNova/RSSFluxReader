@@ -1,43 +1,44 @@
 package com.androidclass.stryker.mplrss;
 
-import android.net.Uri;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragmentInteractionListener {
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-    private FragmentManager f;
+public class MainActivity extends AppCompatActivity {
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        f = getSupportFragmentManager();
-        FragmentTransaction t = f.beginTransaction();
-        ListeRSS p = ListeRSS.newInstance();
-        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
-        t.add(R.id.liste_fragment_frame, p);
-        t.commit();
-        Log.d("Tag", "test2");
-
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onRSSSelection(String title) {
-        UnRSS u = UnRSS.newInstance(title);
-        FragmentTransaction t = f.beginTransaction();
-        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
-        t.replace(R.id.liste_fragment_frame, u);
-        t.addToBackStack(null);
-        //t.addToBackStack(null);FragmentTransaction t;
-        t.commit();
+        tv = findViewById(R.id.tvtest);
+        AssetManager am = getAssets();
+        try {
+            InputStreamReader idr = new InputStreamReader(am.open("BFMPOLITIQUE.xml"));
+            XmlParser xp = new XmlParser();
+            HashMap content = xp.content(xp.uriReader("file://android_asset/BFMPOLITIQUE.xml"));
+            Object obj = content.get("title");
+            ArrayList <String> title = null;
+            if(obj instanceof ArrayList){
+                 title = ((ArrayList <String>) obj);
+            }
+            String toset = "";
+            for(String s : title){
+                toset+= s;
+            }
+            tv.setText(toset);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

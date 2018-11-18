@@ -1,4 +1,8 @@
 package com.androidclass.stryker.mplrss;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,12 +34,12 @@ public class XmlParser {
 
     public HashMap<String,ArrayList<String>> content(Document doc){
         HashMap <String,ArrayList<String>> tree = new HashMap<>();
-        NodeList nl = doc.getElementsByTagName("title");
-        NodeList nl2 = doc.getElementsByTagName("link");
-        NodeList nl3 = doc.getElementsByTagName("description");
+        NodeList nl = doc.getElementsByTagName("channel");
+        //NodeList nl2 = doc.getElementsByTagName("link");
+        //NodeList nl3 = doc.getElementsByTagName("description");
         tree.put("title",nodesToArray(nl));
-        tree.put("description",nodesToArray(nl2));
-        tree.put("link",nodesToArray(nl3));
+        //tree.put("description",nodesToArray(nl2));
+        //tree.put("link",nodesToArray(nl3));
         return tree;
     }
 
