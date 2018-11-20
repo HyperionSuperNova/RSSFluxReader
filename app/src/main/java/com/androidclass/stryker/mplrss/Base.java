@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static android.provider.BaseColumns._ID;
-
 public class Base extends SQLiteOpenHelper {
 
     public final static int VERSION = 9;
@@ -19,8 +17,7 @@ public class Base extends SQLiteOpenHelper {
 
 
 
-    public final static String CREATE_GEO = "create table " + TABLE_RSS + "(" +
-            _ID + "integer primary key autoincrement, " +
+    public final static String CREATE_RSS = "create table " + TABLE_RSS + "(" +
             COLONNE_TITLE + " string, " +
             COLONNE_LINK + " string, " +
             COLONNE_DESCRIPTION + " string, " +
@@ -42,7 +39,7 @@ public class Base extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_GEO);
+        db.execSQL(CREATE_RSS);
     }
 
     @Override

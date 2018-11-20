@@ -40,4 +40,8 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
         //t.addToBackStack(null);FragmentTransaction t;
         t.commit();
     }
+
+    public boolean init(){
+        return true;
+    }
 }
