@@ -127,7 +127,7 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         Uri.Builder builder = new Uri.Builder();
         Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
-        return new CursorLoader(getActivity(), uri, new String[] {"_id", "title"}, null, null, null);
+        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id", "title"}, null, null, null);
     }
 
     @Override

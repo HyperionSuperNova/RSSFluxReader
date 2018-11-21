@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tv = findViewById(R.id.tvtest);
         AssetManager am = getAssets();
         try {
             InputStreamReader idr = new InputStreamReader(am.open("BFMPOLITIQUE.xml"));
@@ -40,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
     }
 
     public boolean init(){

@@ -92,7 +92,7 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         Uri.Builder builder = new Uri.Builder();
         Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
-        return new CursorLoader(getActivity(), uri, new String[] {"_id","title", "link", "description"}, "title = ?", new String[] {titleRSS}, null);
+        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id","title", "link", "description"}, "title = ?", new String[] {titleRSS}, null);
     }
 
     @Override
