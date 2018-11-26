@@ -84,8 +84,6 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
                     + " must implement OnFragmentInteractionListener");
         }
 
-        Uri.Builder builder = new Uri.Builder();
-        Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
         adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, new String[] {"title"}, new int[] {android.R.id.text1});
@@ -96,7 +94,6 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
     @Override
     public void onListItemClick(ListView l, View v, int position, long id){
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        c.moveToFirst();
         String nom = c.getString(c.getColumnIndex("title"));
         mListener.onRSSSelection(nom);
     }
