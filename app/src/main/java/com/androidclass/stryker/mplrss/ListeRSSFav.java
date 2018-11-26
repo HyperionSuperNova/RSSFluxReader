@@ -92,12 +92,14 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
     public void onListItemClick(ListView l, View v, int position, long id){
         Cursor c = (Cursor) getListAdapter().getItem(position);
         String nom = c.getString(c.getColumnIndex("title"));
+        /*
         ContentValues cv = new ContentValues();
         cv.put("date_choisi", "");
         cv.put("choisi", 0);
         Uri.Builder builder = new Uri.Builder();
         Uri uri = builder.scheme("content").authority(authority).appendPath("rss").appendPath("date_choisi").build();
         contentResolver.update(uri,cv, "title = ?", new String [] {nom});
+        */
         mListener.onRSSSelectionFav(nom);
     }
     /*
