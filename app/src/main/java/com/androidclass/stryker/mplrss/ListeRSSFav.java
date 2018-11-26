@@ -86,8 +86,7 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
         Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
-        Cursor c = contentResolver.query(uri, new String [] {"rowid as _id", "title"}, "choisi = 1", null,null);
-        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, c, new String[] {"title"}, new int[] {android.R.id.text1});
+        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, new String[] {"title"}, new int[] {android.R.id.text1});
         setListAdapter(adapter);
     }
 
