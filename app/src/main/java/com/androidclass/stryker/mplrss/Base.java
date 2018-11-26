@@ -23,7 +23,7 @@ public class Base extends SQLiteOpenHelper {
             COLONNE_LINK + " string, " +
             COLONNE_DESCRIPTION + " string, " +
             COLONNE_DATE_LAST_CHANGE + " date, " +
-            COLONNE_DATE_CHOISI + " date, " +
+            COLONNE_DATE_CHOISI + " string, " +
             COLONNE_CHOISI + " integer default 0 " + ");";
 
 

@@ -24,6 +24,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.zip.Inflater;
 
 
@@ -101,8 +104,15 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
                 Uri.Builder builder = new Uri.Builder();
                 Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
 
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DATE, 1);
+                Date d = cal.getTime();
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+                String currentDate = format.format(d);
+
                 ContentValues c = new ContentValues();
                 c.put("choisi", 1);
+                c.put("date_choisi", currentDate);
                 contentResolver.update(uri, c, "title = ?", new String [] {title.getText().toString()});
 
             }
