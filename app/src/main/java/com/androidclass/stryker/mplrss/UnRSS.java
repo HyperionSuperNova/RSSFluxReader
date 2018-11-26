@@ -134,6 +134,19 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
             }
         });
 
+        sup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri.Builder builder = new Uri.Builder();
+                Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
+
+                ContentValues c = new ContentValues();
+                c.put("choisi", 0);
+                c.put("date_choisi", "");
+                contentResolver.update(uri, c, "title = ?", new String [] {title.getText().toString()});
+            }
+        });
+
         return v;
     }
 
