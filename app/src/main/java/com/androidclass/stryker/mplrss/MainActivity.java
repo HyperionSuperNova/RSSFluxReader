@@ -103,7 +103,19 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
 
     @Override
     public void onRSSSelection(String title) {
-        UnRSS u = UnRSS.newInstance(title);
+        UnRSS u = UnRSS.newInstance(title, false);
+        u.setContentResolver(MainActivity.this);
+        FragmentTransaction t = f.beginTransaction();
+        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
+        t.replace(R.id.liste_fragment_frame, u);
+        t.addToBackStack(null);
+        //t.addToBackStack(null);FragmentTransaction t;
+        t.commit();
+    }
+
+    @Override
+    public void onRSSSelectionFav(String title) {
+        UnRSS u = UnRSS.newInstance(title, true);
         u.setContentResolver(MainActivity.this);
         FragmentTransaction t = f.beginTransaction();
         //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());

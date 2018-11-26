@@ -1,6 +1,7 @@
 package com.androidclass.stryker.mplrss;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -81,9 +82,6 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
             throw new RuntimeException(getActivity().toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
-        Uri.Builder builder = new Uri.Builder();
-        Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
         adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, new String[] {"title"}, new int[] {android.R.id.text1});
@@ -93,9 +91,14 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
     @Override
     public void onListItemClick(ListView l, View v, int position, long id){
         Cursor c = (Cursor) getListAdapter().getItem(position);
-        c.moveToFirst();
         String nom = c.getString(c.getColumnIndex("title"));
-        mListener.onRSSSelection(nom);
+        ContentValues cv = new ContentValues();
+        cv.put("date_choisi", "");
+        cv.put("choisi", 0);
+        Uri.Builder builder = new Uri.Builder();
+        Uri uri = builder.scheme("content").authority(authority).appendPath("rss").appendPath("date_choisi").build();
+        contentResolver.update(uri,cv, "title = ?", new String [] {nom});
+        mListener.onRSSSelectionFav(nom);
     }
     /*
 
@@ -155,7 +158,17 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
-     * activity.
+     * activity.@Override
+    public void onRSSSelection(String title) {
+        UnRSS u = UnRSS.newInstance(title);
+        u.setContentResolver(MainActivity.this);
+        FragmentTransaction t = f.beginTransaction();
+        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
+        t.replace(R.id.liste_fragment_frame, u);
+        t.addToBackStack(null);
+        //t.addToBackStack(null);FragmentTransaction t;
+        t.commit();
+    }
      * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
@@ -164,6 +177,6 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void onRSSSelection(String title);
+        void onRSSSelectionFav(String title);
     }
 }

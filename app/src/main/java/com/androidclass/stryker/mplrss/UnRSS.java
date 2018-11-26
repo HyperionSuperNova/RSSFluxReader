@@ -39,9 +39,11 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "titleRSS";
+    private static final String ARG_PARAM2 = "fav";
 
     // TODO: Rename and change types of parameters
     private String titleRSS;
+    private boolean favRSS;
 
     private ContentResolver contentResolver;
 
@@ -68,10 +70,11 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
      * @return A new instance of fragment UnPaysFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UnRSS newInstance(String nomPays) {
+    public static UnRSS newInstance(String nomPays, boolean fav) {
         UnRSS fragment = new UnRSS();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, nomPays);
+        args.putBoolean(ARG_PARAM2, fav);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,6 +84,8 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             titleRSS= getArguments().getString(ARG_PARAM1);
+            favRSS = getArguments().getBoolean(ARG_PARAM2);
+
         }
     }
 
@@ -97,6 +102,17 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         loaderManager.initLoader(0, null, this);
 
         Button maListe = (Button) v.findViewById(R.id.maListe);
+        Button sup = (Button) v.findViewById(R.id.supprimer);
+
+        if(favRSS){
+            maListe.setVisibility(View.INVISIBLE);
+            sup.setVisibility(View.VISIBLE);
+        }else{
+            sup.setVisibility(View.INVISIBLE);
+            maListe.setVisibility(View.VISIBLE);
+        }
+
+
         maListe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
