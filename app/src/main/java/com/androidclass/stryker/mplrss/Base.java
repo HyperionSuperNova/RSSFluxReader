@@ -14,6 +14,7 @@ public class Base extends SQLiteOpenHelper {
     public final static String COLONNE_DESCRIPTION = "description";
     public final static String COLONNE_DATE_LAST_CHANGE = "date_last_change";
     public final static String COLONNE_DATE_CHOISI = "date_choisi";
+    public final static String COLONNE_CHOISI = "choisi";
 
 
 
@@ -22,7 +23,8 @@ public class Base extends SQLiteOpenHelper {
             COLONNE_LINK + " string, " +
             COLONNE_DESCRIPTION + " string, " +
             COLONNE_DATE_LAST_CHANGE + " date, " +
-            COLONNE_DATE_CHOISI + " date " + ");";
+            COLONNE_DATE_CHOISI + " date, " +
+            COLONNE_CHOISI + " integer default 0 " + ");";
 
 
     private static Base ourInstance;

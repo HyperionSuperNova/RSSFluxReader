@@ -25,7 +25,7 @@ public class MplrssContentProvider extends ContentProvider {
     public final static int COLONNE_LINK = 3;
     public final static int COLONNE_DESCRIPTION = 4;
     public final static int COLONNE_DATE_LAST_CHANGE = 5;
-    public final static int COLONNE_DATE_CHOISI = 6;
+    public final static int COLONNE_CHOISI = 6;
 
     private final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     {
@@ -33,6 +33,7 @@ public class MplrssContentProvider extends ContentProvider {
         uriMatcher.addURI(authority, "rss/title", COLONNE_TITLE);
         uriMatcher.addURI(authority, "rss/link", COLONNE_LINK);
         uriMatcher.addURI(authority, "rss/description", COLONNE_DESCRIPTION);
+        uriMatcher.addURI(authority, "rss/choisi", COLONNE_CHOISI);
     }
     public MplrssContentProvider() {
     }
@@ -103,6 +104,9 @@ public class MplrssContentProvider extends ContentProvider {
             case COLONNE_DESCRIPTION:
                 cursor = null;
                 break;
+            case COLONNE_CHOISI:
+                cursor = db.query("rss", projection, selection, selectionArgs, null, null, sortOrder);
+                break;
             default:
                 Log.d("Uri provider def=", uri.toString());
                 throw new UnsupportedOperationException("this query is not yet implemented  " +
@@ -115,13 +119,17 @@ public class MplrssContentProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
         SQLiteDatabase db = base.getReadableDatabase();
+        db.update("rss", values, selection, selectionArgs);
+        return 1;
+
+        /*
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 1);
         Date d = cal.getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         //String currentDate = format.format(d);
 
-        selection = "date_choisi = ?";
+        selection = "choisi = 1";
         String date_choix = "";
         selectionArgs = new String []{date_choix};
         Cursor cursor = db.query("rss", new String []{"date_choisi"}, selection, selectionArgs, null, null, null);
@@ -143,5 +151,6 @@ public class MplrssContentProvider extends ContentProvider {
         // TODO: Implement this to handle requests to update one or more rows.
         // TODO: recuperer date actuelle checker si 3 mois diff avec date_choisi. Si oui mettre date_choisi à null
         throw new UnsupportedOperationException("Not yet implemented");
+        */
     }
 }

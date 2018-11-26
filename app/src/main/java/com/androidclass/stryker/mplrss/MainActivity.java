@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragmentInteractionListener, PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragmentInteractionListener, ListeRSSFav.OnFragmentInteractionListener {
     TextView tv;
     private FragmentManager f;
 
@@ -66,20 +66,6 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
         t.add(R.id.liste_fragment_frame, p);
         t.commit();
         Log.d("Tag", "test2");
-
-        /*
-        Button iconMenu = findViewById(R.id.iconMenu);
-        iconMenu.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                PopupMenu popup = new PopupMenu(MainActivity.this, view);
-                popup.setOnMenuItemClickListener(MainActivity.this);
-                popup.inflate(R.menu.menu);
-                popup.show();
-            }
-        });
-        */
         /*
 
         AssetManager am = getAssets();
@@ -118,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
     @Override
     public void onRSSSelection(String title) {
         UnRSS u = UnRSS.newInstance(title);
+        u.setContentResolver(MainActivity.this);
         FragmentTransaction t = f.beginTransaction();
         //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
         t.replace(R.id.liste_fragment_frame, u);
@@ -134,7 +121,24 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        return false;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.mes_rss:
+                System.out.println("TEST:::   COUCOU");
+                FragmentTransaction t = f.beginTransaction();
+                ListeRSSFav p = ListeRSSFav.newInstance();
+                p.setContentResolver(MainActivity.this);
+                t.replace(R.id.liste_fragment_frame, p);
+                t.addToBackStack(null);
+                t.commit();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
+
 }

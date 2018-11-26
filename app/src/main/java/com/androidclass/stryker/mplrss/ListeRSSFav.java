@@ -1,7 +1,6 @@
 package com.androidclass.stryker.mplrss;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,31 +12,28 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
+ * {@link ListeRSSFav.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ListeRSS#newInstance} factory method to
+ * Use the {@link ListeRSSFav#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    //private String mParam1;
-    //private String mParam2;
-
     private String authority = "fr.cartman.respect.my.authority";
 
     private OnFragmentInteractionListener mListener;
@@ -55,29 +51,31 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
     public final static String COLONNE_DESCRIPTION = "description";
     public final static String COLONNE_CHOISI = "choisi";
 
-    public ListeRSS() {
+
+    public ListeRSSFav() {
         // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @return A new instance of fragment ListPaysFragment.
+     *
+     * @return A new instance of fragment ListeRSSFav.
      */
     // TODO: Rename and change types and number of parameters
-    public static ListeRSS newInstance() {
-        return new ListeRSS();
+    public static ListeRSSFav newInstance() {
+        return new ListeRSSFav();
     }
 
     public void setContentResolver(Context context){
         contentResolver = context.getContentResolver();
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         super.onAttach(getActivity());
-        if (getActivity() instanceof OnFragmentInteractionListener) {
+        if (getActivity() instanceof ListeRSS.OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) getActivity();
         } else {
             throw new RuntimeException(getActivity().toString()
@@ -88,9 +86,9 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
         Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
-        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, new String[] {"title"}, new int[] {android.R.id.text1});
+        Cursor c = contentResolver.query(uri, new String [] {"rowid as _id", "title"}, "choisi = 1", null,null);
+        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, c, new String[] {"title"}, new int[] {android.R.id.text1});
         setListAdapter(adapter);
-
     }
 
     @Override
@@ -100,26 +98,22 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
         String nom = c.getString(c.getColumnIndex("title"));
         mListener.onRSSSelection(nom);
     }
-
     /*
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        TextView textView = new TextView(getActivity());
-        textView.setText(R.string.hello_blank_fragment);
-        return textView;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_liste_rssfav, container, false);
     }
-    */
-/*
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
-    */
 
-    /*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -143,7 +137,7 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         Uri.Builder builder = new Uri.Builder();
         Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
-        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id", "title"}, null, null, null);
+        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id", "title"}, "choisi = 1", null, null);
     }
 
     @Override
@@ -172,18 +166,5 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void onRSSSelection(String title);
-    }
-
-    public void ajoutRSS(String title, String link, String description){
-
-        ContentValues values = new ContentValues();
-        values.put(COLONNE_TITLE, title);
-        values.put(COLONNE_LINK, link);
-        values.put(COLONNE_DESCRIPTION, description);
-
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("content").authority(authority).appendPath(TABLE_RSS);
-        Uri uri = builder.build();
-        uri = contentResolver.insert(uri,values);
     }
 }

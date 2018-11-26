@@ -1,5 +1,8 @@
 package com.androidclass.stryker.mplrss;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,6 +40,8 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     // TODO: Rename and change types of parameters
     private String titleRSS;
 
+    private ContentResolver contentResolver;
+
     private String authority = "fr.cartman.respect.my.authority";
 
 
@@ -46,6 +51,10 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
 
     public UnRSS() {
         // Required empty public constructor
+    }
+
+    public void setContentResolver(Context context){
+        contentResolver = context.getContentResolver();
     }
 
     /**
@@ -89,6 +98,13 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
             @Override
             public void onClick(View v) {
                 //TODO mettre RSS dans liste utilisateur
+                Uri.Builder builder = new Uri.Builder();
+                Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
+
+                ContentValues c = new ContentValues();
+                c.put("choisi", 1);
+                contentResolver.update(uri, c, "title = ?", new String [] {title.getText().toString()});
+
             }
         });
 
