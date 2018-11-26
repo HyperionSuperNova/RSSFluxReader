@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -82,6 +83,14 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
 
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
+
+        Button maListe = (Button) v.findViewById(R.id.maListe);
+        maListe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO mettre RSS dans liste utilisateur
+            }
+        });
 
         return v;
     }

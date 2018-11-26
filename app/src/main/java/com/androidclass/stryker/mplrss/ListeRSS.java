@@ -1,5 +1,7 @@
 package com.androidclass.stryker.mplrss;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -42,6 +44,16 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
 
     private SimpleCursorAdapter adapter;
 
+    private ContentResolver contentResolver;
+
+
+    public final static int VERSION = 9;
+    public final static String DB_NAME = "base_rss";
+    public final static String TABLE_RSS = "rss";
+    public final static String COLONNE_TITLE = "title";
+    public final static String COLONNE_LINK = "link";
+    public final static String COLONNE_DESCRIPTION = "description";
+
     public ListeRSS() {
         // Required empty public constructor
     }
@@ -56,6 +68,9 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
         return new ListeRSS();
     }
 
+    public void setContentResolver(Context context){
+        contentResolver = context.getContentResolver();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,5 +171,18 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void onRSSSelection(String title);
+    }
+
+    public void ajoutRSS(String title, String link, String description){
+
+        ContentValues values = new ContentValues();
+        values.put(COLONNE_TITLE, title);
+        values.put(COLONNE_LINK, link);
+        values.put(COLONNE_DESCRIPTION, description);
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("content").authority(authority).appendPath(TABLE_RSS);
+        Uri uri = builder.build();
+        uri = contentResolver.insert(uri,values);
     }
 }
