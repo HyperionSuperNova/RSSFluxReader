@@ -146,7 +146,6 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
                 c.put("date_choisi", "");
                 contentResolver.update(uri, c, "title = ?", new String [] {title.getText().toString()});
                 getFragmentManager().popBackStack();
-                getFragmentManager().popBackStack();
             }
         });
 

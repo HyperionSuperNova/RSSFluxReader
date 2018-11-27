@@ -1,8 +1,10 @@
 package com.androidclass.stryker.mplrss;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 
 public class Base extends SQLiteOpenHelper {
 
@@ -15,7 +17,6 @@ public class Base extends SQLiteOpenHelper {
     public final static String COLONNE_DATE_LAST_CHANGE = "date_last_change";
     public final static String COLONNE_DATE_CHOISI = "date_choisi";
     public final static String COLONNE_CHOISI = "choisi";
-
 
 
     public final static String CREATE_RSS = "create table " + TABLE_RSS + "(" +

@@ -1,7 +1,10 @@
 package com.androidclass.stryker.mplrss;
 
+import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -24,18 +28,25 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragmentInteractionListener, ListeRSSFav.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragmentInteractionListener, ListeRSSFav.OnFragmentInteractionListener, ListeRSSSearch.OnFragmentInteractionListener {
     TextView tv;
     private FragmentManager f;
+    private ListeRSS p;
+
+    private String authority = "fr.cartman.respect.my.authority";
+    public final static String TABLE_RSS = "rss";
+
+    private ContentResolver contentResolver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        contentResolver = this.getContentResolver();
 
         f = getSupportFragmentManager();
         FragmentTransaction t = f.beginTransaction();
-        ListeRSS p = ListeRSS.newInstance();
+        p = ListeRSS.newInstance();
         p.setContentResolver(MainActivity.this);
         p.ajoutRSS("France", "Paris", "Europe");
         p.ajoutRSS("Togo", "Lomé", "Afrique");
@@ -129,6 +140,43 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+
+        final MenuItem myActionMenuItem = menu.findItem( R.id.search);
+        final SearchView searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Toast like print
+
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("content").authority(authority).appendPath(TABLE_RSS).appendPath("search");
+                Uri uri = builder.build();
+                Cursor c = contentResolver.query(uri, new String[] {"rowid as _id", "title"}, "title LIKE ?",new String [] {"%"+query+"%"}, null);
+
+                f = getSupportFragmentManager();
+                FragmentTransaction t = f.beginTransaction();
+                ListeRSSSearch p = ListeRSSSearch.newInstance(query);
+                p.setContentResolver(MainActivity.this);
+
+                t.replace(R.id.liste_fragment_frame, p);
+                t.addToBackStack(null);
+                t.commit();
+
+
+                Log.d( "SearchOnQueryTextSubmit: ", query);
+                if( ! searchView.isIconified()) {
+                    searchView.setIconified(true);
+                }
+                myActionMenuItem.collapseActionView();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -136,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mes_rss:
-                System.out.println("TEST:::   COUCOU");
                 FragmentTransaction t = f.beginTransaction();
                 ListeRSSFav p = ListeRSSFav.newInstance();
                 p.setContentResolver(MainActivity.this);

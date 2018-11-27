@@ -24,7 +24,7 @@ public class MplrssContentProvider extends ContentProvider {
     public final static int COLONNE_TITLE = 2;
     public final static int COLONNE_LINK = 3;
     public final static int COLONNE_DESCRIPTION = 4;
-    public final static int COLONNE_DATE_LAST_CHANGE = 5;
+    public final static int COLONNE_SEARCH = 5;
     public final static int COLONNE_CHOISI = 6;
 
     private final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -34,6 +34,7 @@ public class MplrssContentProvider extends ContentProvider {
         uriMatcher.addURI(authority, "rss/link", COLONNE_LINK);
         uriMatcher.addURI(authority, "rss/description", COLONNE_DESCRIPTION);
         uriMatcher.addURI(authority, "rss/choisi", COLONNE_CHOISI);
+        uriMatcher.addURI(authority, "rss/search", COLONNE_SEARCH);
     }
     public MplrssContentProvider() {
     }
@@ -100,6 +101,10 @@ public class MplrssContentProvider extends ContentProvider {
                 break;
             case COLONNE_LINK:
                 cursor = null;
+                break;
+            case COLONNE_SEARCH:
+                System.out.println("TEST:::::::::::::::::::::::::  OUOUOUOUOU");
+                cursor = db.query("rss", projection, selection, selectionArgs, null, null, null);
                 break;
             case COLONNE_DESCRIPTION:
                 cursor = null;

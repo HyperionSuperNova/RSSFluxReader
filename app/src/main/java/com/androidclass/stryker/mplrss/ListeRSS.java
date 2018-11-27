@@ -46,6 +46,8 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
 
     private ContentResolver contentResolver;
 
+    private Cursor cursor;
+
 
     public final static int VERSION = 9;
     public final static String DB_NAME = "base_rss";
@@ -72,6 +74,12 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
     public void setContentResolver(Context context){
         contentResolver = context.getContentResolver();
     }
+
+    public void setCursor(Cursor cursor){
+        this.cursor = cursor;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +94,7 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
 
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
-        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, new String[] {"title"}, new int[] {android.R.id.text1});
+        adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor, new String[] {"title"}, new int[] {android.R.id.text1});
         setListAdapter(adapter);
 
     }
@@ -151,7 +159,7 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        adapter.swapCursor(null);
+        adapter.swapCursor(cursor);
         adapter.notifyDataSetChanged();
     }
 
