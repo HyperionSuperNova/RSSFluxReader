@@ -41,6 +41,8 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
 
     private SimpleCursorAdapter adapter;
 
+    private LoaderManager loaderManager;
+
 
 
     public ListeRSSFav() {
@@ -69,7 +71,7 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
             throw new RuntimeException(getActivity().toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        LoaderManager loaderManager = getLoaderManager();
+        loaderManager = getLoaderManager();
         loaderManager.initLoader(0, null, this);
         adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, new String[] {"title"}, new int[] {android.R.id.text1});
         setListAdapter(adapter);
@@ -80,6 +82,7 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
         Cursor c = (Cursor) getListAdapter().getItem(position);
         String nom = c.getString(c.getColumnIndex("title"));
         mListener.onRSSSelectionFav(nom);
+        loaderManager.restartLoader(0, null, this);
     }
     /*
 
