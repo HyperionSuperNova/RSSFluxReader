@@ -42,6 +42,7 @@ public class ListeRSSSearch extends ListFragment implements LoaderManager.Loader
 
     // TODO: Rename and change types of parameters
     private String titleRSS;
+    private String descriptionRSS;
 
     private ListeRSSSearch.OnFragmentInteractionListener mListener;
 
@@ -67,7 +68,7 @@ public class ListeRSSSearch extends ListFragment implements LoaderManager.Loader
      * this fragment using the provided parameters.
      *
      * @param nomPays nom du pays.
-     * @return A new instance of fragment UnPaysFragment.
+     * @return A new instance of fragment ListRSSSearch.
      */
     // TODO: Rename and change types and number of parameters
     public static ListeRSSSearch newInstance(String nomPays) {
@@ -153,7 +154,7 @@ public class ListeRSSSearch extends ListFragment implements LoaderManager.Loader
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         Uri.Builder builder = new Uri.Builder();
         Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
-        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id", "title"}, "title LIKE ?", new String [] {"%"+titleRSS+"%"}, null);
+        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id", "title"}, "title LIKE ? OR description LIKE ?", new String [] {"%"+titleRSS+"%"}, null);
     }
 
     @Override
