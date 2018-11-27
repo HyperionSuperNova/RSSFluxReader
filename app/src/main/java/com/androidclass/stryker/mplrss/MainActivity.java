@@ -31,22 +31,16 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragmentInteractionListener, ListeRSSFav.OnFragmentInteractionListener, ListeRSSSearch.OnFragmentInteractionListener {
     TextView tv;
     private FragmentManager f;
-    private ListeRSS p;
 
-    private String authority = "fr.cartman.respect.my.authority";
-    public final static String TABLE_RSS = "rss";
-
-    private ContentResolver contentResolver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        contentResolver = this.getContentResolver();
 
         f = getSupportFragmentManager();
         FragmentTransaction t = f.beginTransaction();
-        p = ListeRSS.newInstance();
+        ListeRSS p = ListeRSS.newInstance();
         p.setContentResolver(MainActivity.this);
         p.ajoutRSS("France", "Paris", "Europe");
         p.ajoutRSS("Togo", "Lomé", "Afrique");
@@ -146,12 +140,6 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Toast like print
-
-                Uri.Builder builder = new Uri.Builder();
-                builder.scheme("content").authority(authority).appendPath(TABLE_RSS).appendPath("search");
-                Uri uri = builder.build();
-                Cursor c = contentResolver.query(uri, new String[] {"rowid as _id", "title"}, "title LIKE ?",new String [] {"%"+query+"%"}, null);
 
                 f = getSupportFragmentManager();
                 FragmentTransaction t = f.beginTransaction();
@@ -186,7 +174,6 @@ public class MainActivity extends AppCompatActivity implements ListeRSS.OnFragme
             case R.id.mes_rss:
                 FragmentTransaction t = f.beginTransaction();
                 ListeRSSFav p = ListeRSSFav.newInstance();
-                p.setContentResolver(MainActivity.this);
                 t.replace(R.id.liste_fragment_frame, p);
                 t.addToBackStack(null);
                 t.commit();
