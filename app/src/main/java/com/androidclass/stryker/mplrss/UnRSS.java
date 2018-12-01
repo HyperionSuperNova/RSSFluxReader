@@ -35,7 +35,7 @@ import java.util.zip.Inflater;
  * Use the {@link UnRSS#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class UnRSS extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "titleRSS";
@@ -98,8 +98,18 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         link = (TextView) v.findViewById(R.id.link);
         description = (TextView) v.findViewById(R.id.description);
 
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(0, null, this);
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("content").authority(authority).appendPath("rss");
+        Uri uri = builder.build();
+        CursorLoader c = new CursorLoader(getActivity(),uri,new String[]{"rowid as _id","*"},"title=?",new String[]{titleRSS},null);
+        Cursor cc = c.loadInBackground();
+        cc.moveToFirst();
+
+        title.setText(cc.getString(cc.getColumnIndexOrThrow("title")));
+        link.setText(cc.getString(cc.getColumnIndexOrThrow("link")));
+        description.setText(cc.getString(cc.getColumnIndexOrThrow("description")));
+
 
         Button maListe = (Button) v.findViewById(R.id.maListe);
         Button sup = (Button) v.findViewById(R.id.supprimer);
@@ -150,28 +160,6 @@ public class UnRSS extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         });
 
         return v;
-    }
-
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-        Uri.Builder builder = new Uri.Builder();
-        Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
-        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id","title", "link", "description"}, "title = ?", new String[] {titleRSS}, null);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        title.setText(titleRSS);
-        cursor.moveToFirst();
-        link.setText(cursor.getString(cursor.getColumnIndex("link")));
-        description.setText(cursor.getString(cursor.getColumnIndex("description")));
-
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
     }
 }
 
