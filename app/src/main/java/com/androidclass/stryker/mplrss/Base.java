@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 public class Base extends SQLiteOpenHelper {
 
-    public final static int VERSION = 28;
+    public final static int VERSION = 46;
     public final static String DB_NAME = "base_rss";
     public final static String TABLE_RSS = "rss";
     public final static String COLONNE_TITLE = "title";
@@ -31,7 +31,7 @@ public class Base extends SQLiteOpenHelper {
             COLONNE_IDFLUX + " integer, " +
             COLONNE_ITEM + " string, " +
             COLONNE_DESCRIPTION + " string, " +
-            COLONNE_DATE_LAST_CHANGE + " datetime, " +
+            COLONNE_DATE_LAST_CHANGE + " string, " +
             COLONNE_DATE_CHOISI + " string, " +
             COLONNE_CHOISI + " integer default 0, " +
             "FOREIGN KEY(id_flux) REFERENCES flux(id)" +

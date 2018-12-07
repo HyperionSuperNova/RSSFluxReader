@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private String mFeedTitle;
     private String mFeedLink;
     private String mFeedDescription;
+    private String mFeedDateLastChange;
     private RecyclerView.LayoutManager mLayoutManager;
 
 
@@ -148,16 +149,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static String dateFormater(String dateFromJSON, String expectedFormat, String oldFormat) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(oldFormat, Locale.ENGLISH);
+        Date date = null;
+        String convertedDate = null;
+        try {
+            date = dateFormat.parse(dateFromJSON);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(expectedFormat, Locale.ENGLISH);
+            convertedDate = simpleDateFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
+    }
+
     public ArrayList<List> parseName(InputStream inputStream) throws XmlPullParserException, IOException {
         String title = null;
         String link = null;
         String description = null;
+        String dateLastChange = null;
         boolean isItem = false;
         String pubDate = null;
         List<XmlParser> items = new ArrayList<>();
         List<Flux> items2 = new ArrayList<>();
         ArrayList<List> al = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
         try {
             XmlPullParser xmlPullParser = Xml.newPullParser();
             xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -198,19 +214,26 @@ public class MainActivity extends AppCompatActivity {
                     link = result;
                 } else if (name.equalsIgnoreCase("description")) {
                     description = result;
-                }else if (name.equalsIgnoreCase("pubdate")) {
-                    //pubDate = sdf.parse(result).toString();
+
+                }else if (name.equalsIgnoreCase("pubDate")) {
+                    dateLastChange = result;
+
                 }
 
                 if (title != null && link != null && description != null) {
                     if (isItem) {
-                        XmlParser item = new XmlParser(title, link, description,pubDate);
+                        String formattedDate = dateFormater(dateLastChange, "yyyy-MM-dd","EEE, dd MMM yyyy HH:mm:ss Z");
+                        XmlParser item = new XmlParser(title, link, description,formattedDate);
                         items.add(item);
+
                     } else {
                         mFeedTitle = title;
                         mFeedLink = link;
                         mFeedDescription = description;
-                        items2.add(new Flux(mFeedLink,mFeedTitle,description));
+                        mFeedDateLastChange = dateLastChange;
+                        items2.add(new Flux(mFeedLink,mFeedTitle,description, dateLastChange));
+
+
                     }
 
                     title = null;

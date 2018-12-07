@@ -81,7 +81,8 @@ public class DataAccess {
                 String link = c.getString(c.getColumnIndexOrThrow(COLONNE_FLUX));
                 String title = c.getString(c.getColumnIndexOrThrow(COLONNE_TITLEFLUX));
                 String description = c.getString(c.getColumnIndexOrThrow(COLONNE_DESCFLUX));
-                f.add(new Flux(link,title,description));
+                String dateLastChange = c.getString(c.getColumnIndexOrThrow(COLONNE_DATE_LAST_CHANGE));
+                f.add(new Flux(link,title,description, dateLastChange));
             }
         }
         c.close();
