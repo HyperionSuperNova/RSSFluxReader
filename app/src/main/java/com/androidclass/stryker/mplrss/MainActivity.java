@@ -11,6 +11,8 @@ import android.content.IntentFilter;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.v4.app.FragmentManager;
@@ -47,9 +49,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragmentInteractionListener, ListeRSSFav.OnFragmentInteractionListener, ListeRSSSearch.OnFragmentInteractionListener  {
     TextView tv;
@@ -71,11 +78,18 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ad = new DataAccess(this);
         dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        ad = new DataAccess(this);
+        List<Flux> flux = ad.storedFlux();
+        if(!flux.isEmpty()){
+            fluxList = flux;
+            mRecyclerView.setAdapter(new FluxAdapter(fluxList));
+        }else{
+            fluxList = new ArrayList<>();
+        }
     }
 
     private void load(String s) {
@@ -98,6 +112,8 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
         System.out.println(cur != null);
         if (cur != null) {
             ParcelFileDescriptor pDesc = null;
+            ParcelFileDescriptor pDesc2 = null;
+
             try {
                 pDesc = dm.openDownloadedFile(id);
             } catch (FileNotFoundException e) {
@@ -106,8 +122,19 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
             if (pDesc != null) {
                 FileDescriptor desc = pDesc.getFileDescriptor();
                 try {
-                    //mFeedModelList = parseFeed(new FileInputStream(desc));
-                    fluxList = parseName(new FileInputStream(desc));
+                    ArrayList<List> al =parseName(new FileInputStream(desc));
+                    List <Flux> tmp = al.get(0);
+                    int id = -1;
+                    for(Flux f : tmp){
+                        fluxList.add(f);
+                        ad.ajoutFlux(f.link,f.title,f.description);
+                        id = ad.getIdFlux(f.title);
+                    }
+                    List<XmlParser> xp = al.get(1);
+                    for(XmlParser x : xp){
+                        ad.ajoutItems(x.title,id,x.link,x.description,x.datepub);
+                    }
+
                 } catch (XmlPullParserException | IOException e) {
                     e.printStackTrace();
                 }
@@ -121,15 +148,16 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
         }
     }
 
-    public List<Flux> parseName(InputStream inputStream) throws XmlPullParserException, IOException {
+    public ArrayList<List> parseName(InputStream inputStream) throws XmlPullParserException, IOException {
         String title = null;
         String link = null;
         String description = null;
         boolean isItem = false;
+        String pubDate = null;
         List<XmlParser> items = new ArrayList<>();
         List<Flux> items2 = new ArrayList<>();
-
-
+        ArrayList<List> al = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
         try {
             XmlPullParser xmlPullParser = Xml.newPullParser();
             xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -170,11 +198,13 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
                     link = result;
                 } else if (name.equalsIgnoreCase("description")) {
                     description = result;
+                }else if (name.equalsIgnoreCase("pubdate")) {
+                    //pubDate = sdf.parse(result).toString();
                 }
 
                 if (title != null && link != null && description != null) {
                     if (isItem) {
-                        XmlParser item = new XmlParser(title, link, description);
+                        XmlParser item = new XmlParser(title, link, description,pubDate);
                         items.add(item);
                     } else {
                         mFeedTitle = title;
@@ -190,10 +220,13 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
                 }
             }
 
-            return items2;
         }finally {
             inputStream.close();
         }
+        al.add(items2);
+        al.add(items);
+        return al;
+
     }
 
     @Override
@@ -279,7 +312,8 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
     }
 
     public List<XmlParser> parseFeed(InputStream inputStream) throws XmlPullParserException,
-            IOException {
+            IOException, ParseException {
+
         String title = null;
         String link = null;
         String description = null;
@@ -326,11 +360,13 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
                     link = result;
                 } else if (name.equalsIgnoreCase("description")) {
                     description = result;
+                }else if(name.equalsIgnoreCase("pubDate")){
+                    //date = formatter.parse(result);
                 }
 
                 if (title != null && link != null && description != null) {
                     if (isItem) {
-                        XmlParser item = new XmlParser(title, link, description);
+                        XmlParser item = new XmlParser(title, link, description,"");
                         items.add(item);
                     } else {
                         mFeedTitle = title;
@@ -346,10 +382,11 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
                 }
             }
 
-            return items;
         } finally {
             inputStream.close();
         }
+        return items;
+
     }
 
 

@@ -29,6 +29,7 @@ public class MplrssContentProvider extends ContentProvider {
     public final static int CODE_FLUX = 10;
 
     private final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
     {
         uriMatcher.addURI(authority, "rss", TABLE_RSS);
         uriMatcher.addURI(authority, "rss/title", COLONNE_TITLE);
@@ -38,6 +39,7 @@ public class MplrssContentProvider extends ContentProvider {
         uriMatcher.addURI(authority, "rss/search", COLONNE_SEARCH);
         uriMatcher.addURI(authority, "flux", CODE_FLUX);
     }
+
     public MplrssContentProvider() {
     }
 
@@ -96,6 +98,11 @@ public class MplrssContentProvider extends ContentProvider {
             case CODE_FLUX:
                 Log.d("Uri Provider : ", uri.toString());
                 id = sdb.insertOrThrow("flux", null, values);
+                path = "rss";
+                break;
+            case TABLE_RSS:
+                Log.d("Uri Provider : ", uri.toString());
+                id = sdb.insertOrThrow("rss", null, values);
                 path = "flux";
                 break;
             default:
@@ -109,11 +116,14 @@ public class MplrssContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Log.d("provider","start query");
+        Log.d("provider", "start query");
         SQLiteDatabase db = base.getReadableDatabase();
         int code = uriMatcher.match(uri);
         Cursor cursor;
         switch (code) {
+            case CODE_FLUX:
+                cursor = db.query("flux", projection, selection, selectionArgs, null, null, sortOrder);
+                break;
             case TABLE_RSS:
                 cursor = db.query("rss", projection, selection,
                         selectionArgs, null, null, sortOrder);
@@ -148,7 +158,7 @@ public class MplrssContentProvider extends ContentProvider {
                       String[] selectionArgs) {
         SQLiteDatabase db = base.getReadableDatabase();
         int code = uriMatcher.match(uri);
-        switch(code){
+        switch (code) {
             case TABLE_RSS:
                 db.update("rss", values, selection, selectionArgs);
                 return 1;
@@ -161,26 +171,29 @@ public class MplrssContentProvider extends ContentProvider {
 
                 selection = "choisi = 1";
                 String date_choix = "";
-                selectionArgs = new String []{date_choix};
-                Cursor cursor = db.query("rss", new String []{"date_choisi"}, selection, selectionArgs, null, null, null);
+                selectionArgs = new String[]{date_choix};
+                Cursor cursor = db.query("rss", new String[]{"date_choisi"}, selection, selectionArgs, null, null, null);
 
-                if(cursor.getCount() == 0){
-                    return  -1;
+                if (cursor.getCount() == 0) {
+                    return -1;
                 }
                 cursor.moveToFirst();
-                date_choix =  cursor.getString(cursor.getColumnIndex("date_choisi"));
+                date_choix = cursor.getString(cursor.getColumnIndex("date_choisi"));
 
                 try {
                     Date databaseResult = format.parse(date_choix);
                     long diffDate = d.getTime() - databaseResult.getTime();
                     System.out.println("TEST::::" + diffDate);
-                    if(diffDate > 3){
-                        db.update("rss", values,selection, selectionArgs);
+                    if (diffDate > 3) {
+                        db.update("rss", values, selection, selectionArgs);
                     }
-                }catch(ParseException p){}
+                } catch (ParseException p) {
+                }
                 return 1;
             default:
                 return 0;
         }
     }
+
+
 }
