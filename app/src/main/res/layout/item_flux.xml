@@ -10,13 +10,13 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/linkFlux"
+        android:id="@+id/descriptionFlux"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/descriptionFlux"
+        android:id="@+id/linkFlux"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold" />

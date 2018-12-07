@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 public class Base extends SQLiteOpenHelper {
 
-    public final static int VERSION = 14;
+    public final static int VERSION = 28;
     public final static String DB_NAME = "base_rss";
     public final static String TABLE_RSS = "rss";
     public final static String COLONNE_TITLE = "title";
@@ -21,26 +21,26 @@ public class Base extends SQLiteOpenHelper {
 
     public final static String TABLE_FLUX = "flux";
     public final static String COLONNE_ID = "id";
-    public final static String COLONNE_FLUX = "flux_link";
-    public final static String COLONNE_TITLEFLUX = "flux_title";
-    public final static String COLONNE_DESCFLUX = "flux_description";
+    public final static String COLONNE_FLUX = "fluxLink";
+    public final static String COLONNE_TITLEFLUX = "fluxTitle";
+    public final static String COLONNE_DESCFLUX = "fluxDescription";
 
 
     public final static String CREATE_RSS = "create table " + TABLE_RSS + "(" +
             COLONNE_TITLE + " string primary key, " +
-            COLONNE_IDFLUX + " integer," +
+            COLONNE_IDFLUX + " integer, " +
             COLONNE_ITEM + " string, " +
             COLONNE_DESCRIPTION + " string, " +
-            COLONNE_DATE_LAST_CHANGE + " date, " +
+            COLONNE_DATE_LAST_CHANGE + " datetime, " +
             COLONNE_DATE_CHOISI + " string, " +
             COLONNE_CHOISI + " integer default 0, " +
             "FOREIGN KEY(id_flux) REFERENCES flux(id)" +
             ");";
 
     public final static String CREATE_FEED = "create table " + TABLE_FLUX + "(" +
-            COLONNE_ID +" integer primary key autoincrement,"+
-            COLONNE_FLUX + " string," +
-            COLONNE_TITLEFLUX + " string," +
+            COLONNE_ID +" integer primary key autoincrement, "+
+            COLONNE_FLUX + " string, " +
+            COLONNE_TITLEFLUX + " string, " +
             COLONNE_DESCFLUX + " string" +
             ");";
 
