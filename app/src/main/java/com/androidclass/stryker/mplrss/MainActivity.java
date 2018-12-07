@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragmentInteractionListener, ListeRSSFav.OnFragmentInteractionListener, ListeRSSSearch.OnFragmentInteractionListener  {
     TextView tv;
     private FragmentManager f;
     ProgressBar pb;
@@ -353,4 +353,32 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onRSSSelection(String title) {
+        UnRSS u = UnRSS.newInstance(title, false);
+        u.setContentResolver(MainActivity.this);
+        FragmentTransaction t = f.beginTransaction();
+        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
+        t.replace(R.id.liste_fragment_frame, u);
+        t.addToBackStack(null);
+        //t.addToBackStack(null);FragmentTransaction t;
+        t.commit();
+    }
+
+    @Override
+    public void onRSSSelectionFav(String title) {
+        UnRSS u = UnRSS.newInstance(title, true);
+        u.setContentResolver(MainActivity.this);
+        FragmentTransaction t = f.beginTransaction();
+        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
+        t.replace(R.id.liste_fragment_frame, u);
+        t.addToBackStack(null);
+        //t.addToBackStack(null);FragmentTransaction t;
+        t.commit();
+    }
 }

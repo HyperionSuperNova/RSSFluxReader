@@ -29,14 +29,8 @@ import android.widget.TextView;
  * create an instance of this fragment.
  */
 public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    //private String mParam1;
-    //private String mParam2;
+    private int id_flux;
 
     private String authority = "fr.cartman.respect.my.authority";
 
@@ -67,7 +61,8 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
      * @return A new instance of fragment ListPaysFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ListeRSS newInstance() {
+    public static ListeRSS newInstance(int id_flux) {
+        id_flux = id_flux;
         return new ListeRSS();
     }
 
@@ -148,7 +143,7 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         Uri.Builder builder = new Uri.Builder();
         Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
-        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id", "title"}, null, null, null);
+        return new CursorLoader(getActivity(), uri, new String[] {"rowid as _id", "title"}, "id_flux = ?", new String[] {Integer.toString(id_flux)}, null);
     }
 
     @Override
