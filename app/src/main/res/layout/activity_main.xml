@@ -1,32 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="514dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="16dp"
-        tools:context=".MainActivity">
+    <Button
+        android:id="@+id/fetchFeedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="Fetch"
+        android:onClick="pushToDb"
+        />
 
-        <FrameLayout
-            android:id="@+id/liste_fragment_frame"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="295dp"
+        android:layout_height="49dp"
+        android:layout_marginEnd="1dp"
+        android:layout_toStartOf="@id/fetchFeedButton"
+        >
 
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/rssFeedEditText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+    </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/feedTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textInputLayout"
+        android:text="Feed Title: " />
 
+    <TextView
+        android:id="@+id/feedDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/feedTitle"
+        android:text="Feed Description: " />
 
+    <TextView
+        android:id="@+id/feedLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/feedDescription"
+        android:text="Feed Link: " />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/feedLink">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

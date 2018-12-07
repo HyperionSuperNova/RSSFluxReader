@@ -26,6 +26,7 @@ public class MplrssContentProvider extends ContentProvider {
     public final static int COLONNE_DESCRIPTION = 4;
     public final static int COLONNE_SEARCH = 5;
     public final static int COLONNE_CHOISI = 6;
+    public final static int CODE_FLUX = 10;
 
     private final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     {
@@ -35,6 +36,7 @@ public class MplrssContentProvider extends ContentProvider {
         uriMatcher.addURI(authority, "rss/description", COLONNE_DESCRIPTION);
         uriMatcher.addURI(authority, "rss/choisi", COLONNE_CHOISI);
         uriMatcher.addURI(authority, "rss/search", COLONNE_SEARCH);
+        uriMatcher.addURI(authority, "flux", CODE_FLUX);
     }
     public MplrssContentProvider() {
     }
@@ -52,7 +54,7 @@ public class MplrssContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    @Override
+    /*@Override
     public Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase db = base.getWritableDatabase();
         int code = uriMatcher.match(uri);
@@ -75,12 +77,33 @@ public class MplrssContentProvider extends ContentProvider {
                 .appendPath(path);
 
         return ContentUris.appendId(builder, id).build();
-    }
+    }*/
 
     @Override
     public boolean onCreate() {
         base = Base.getInstance(getContext());
         return true;
+    }
+
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        // TODO: Implement this to handle requests to insert a new row.
+        SQLiteDatabase sdb = base.getWritableDatabase();
+        int code = uriMatcher.match(uri);
+        long id;
+        String path;
+        switch (code) {
+            case CODE_FLUX:
+                Log.d("Uri Provider : ", uri.toString());
+                id = sdb.insertOrThrow("flux", null, values);
+                path = "flux";
+                break;
+            default:
+                Log.d("Uri Provider : ", uri.toString());
+                throw new UnsupportedOperationException("Not yet implemented");
+        }
+        Uri.Builder builder = (new Uri.Builder()).authority(authority).appendPath(path);
+        return ContentUris.appendId(builder, id).build();
     }
 
     @Override

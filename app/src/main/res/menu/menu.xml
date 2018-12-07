@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/accueil"
+        android:icon="@drawable/ic_home"
+        android:title="accueil"
+        android:orderInCategory="1"
+        app:showAsAction="collapseActionView|always" />
+
     <item android:id="@+id/search"
         android:title="rechercher"
-        android:icon="@drawable/ic_search"
+        android:orderInCategory="3"
         app:showAsAction="collapseActionView|always"
         app:actionViewClass="android.widget.SearchView" />
 
     <item android:id="@+id/mes_rss"
         android:title="Mes RSS"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:orderInCategory="4"
+        app:showAsAction="collapseActionView|always" />
+
+    <item android:id="@+id/load"
+        android:title="load"
+        app:showAsAction="always"
+        android:orderInCategory="2"/>
 </menu>
