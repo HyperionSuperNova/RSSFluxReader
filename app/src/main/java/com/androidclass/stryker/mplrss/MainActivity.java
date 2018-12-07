@@ -54,7 +54,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity  {
     TextView tv;
     private FragmentManager f;
-    EditText webAddressView;
     ProgressBar pb;
     DownloadManager dm;
     Uri uri;
@@ -72,19 +71,11 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        webAddressView = findViewById(R.id.rssFeedEditText);
         dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ad = new DataAccess(this);
-    }
-
-    public void pushToDb(View view) {
-        /*String url = webAddressView.getText().toString();
-        if(!url.isEmpty()){
-            load(url);
-        }*/
     }
 
     private void load(String s) {
