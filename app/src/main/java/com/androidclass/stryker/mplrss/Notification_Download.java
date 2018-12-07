@@ -43,11 +43,9 @@ public class Notification_Download extends IntentService {
                 Intent ii = new Intent(this, AfficheActivity.class); // TODO : créer fragment d'affichage des flux dl avec Fragment
                 ii.putExtra("nombre_premier", n );
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, ii, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-                String message = "Téléchargement de : " + adresse;
-                nm.notify(1, monBuilder(message).setContentIntent(pendingIntent).build());
                 */
+                nm.notify(1, monBuilder(adresse).build());//setContentIntent(pendingIntent).build());
+
             }
         }
     }
@@ -65,7 +63,7 @@ public class Notification_Download extends IntentService {
 
     private NotificationCompat.Builder monBuilder(String message){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-        return builder.setSmallIcon(android.R.drawable.star_on). setContentTitle("Téléchargement Terminé").setContentText(message);
+        return builder.setSmallIcon(android.R.drawable.ic_dialog_info). setContentTitle("Téléchargement Terminé").setContentText(message);
     }
 
     private void createNotificationChannel() {

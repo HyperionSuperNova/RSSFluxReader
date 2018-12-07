@@ -235,10 +235,10 @@ public class MainActivity extends AppCompatActivity  {
                             load(adresse);
                         }
 
-                        /*Intent i = new Intent(MainActivity.this, Notification_Download.class);
+                        Intent i = new Intent(MainActivity.this, Notification_Download.class);
                         i.putExtra("adresse", adresse);
                         i.setAction("notif");
-                        startService(i);*/
+                        startService(i);
                     }
                 });
 
