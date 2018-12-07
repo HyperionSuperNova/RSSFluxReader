@@ -30,6 +30,8 @@ import android.widget.TextView;
  */
 public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String FLUX = "id_Flux";
+
     private int id_flux;
 
     private String authority = "fr.cartman.respect.my.authority";
@@ -55,15 +57,12 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * @return A new instance of fragment ListPaysFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ListeRSS newInstance(int id_flux) {
-        id_flux = id_flux;
-        return new ListeRSS();
+        ListeRSS fragment = new ListeRSS();
+        Bundle args = new Bundle();
+        args.putInt(FLUX, id_flux);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public void setContentResolver(Context context){
@@ -78,6 +77,10 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            id_flux = getArguments().getInt(FLUX);
+        }
 
         super.onAttach(getActivity());
         if (getActivity() instanceof OnFragmentInteractionListener) {
@@ -172,18 +175,5 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void onRSSSelection(String title);
-    }
-
-    public void ajoutRSS(String title, String link, String description){
-
-        ContentValues values = new ContentValues();
-        values.put(COLONNE_TITLE, title);
-        values.put(COLONNE_LINK, link);
-        values.put(COLONNE_DESCRIPTION, description);
-
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("content").authority(authority).appendPath(TABLE_RSS);
-        Uri uri = builder.build();
-        uri = contentResolver.insert(uri,values);
     }
 }

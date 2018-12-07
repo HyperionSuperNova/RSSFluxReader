@@ -50,6 +50,7 @@ public class DataAccess {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("content").authority("fr.cartman.respect.my.authority").appendPath(TABLE_FLUX);
         Uri uri = builder.build();
+        //System.out.println("TEST:::::::::::::::::::"+title);
         Cursor c = cr.query(uri, new String[] {"id"}, "fluxTitle = ?", new String[] {title}, null, null);
         c.moveToFirst();
         return c.getInt(c.getColumnIndexOrThrow("id"));

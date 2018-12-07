@@ -3,11 +3,13 @@ package com.androidclass.stryker.mplrss;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -16,39 +18,45 @@ import java.util.List;
 
 public class FluxAdapter extends RecyclerView.Adapter<FluxAdapter.FeedModelViewHolder> {
 
-    List<Flux> l;
-    public static class FeedModelViewHolder extends RecyclerView.ViewHolder {
+    public List<Flux> l;
+
+
+
+    public static class FeedModelViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private View fluxView;
         private FragmentManager f;
-        private ContentResolver contentResolver;
         private String title_flux;
         private int id_flux;
         private DataAccess db;
 
+
         public FeedModelViewHolder(View v) {
             super(v);
+            v.setOnClickListener(this);
             fluxView = v;
-            contentResolver = fluxView.getContext().getContentResolver();
-            db = new DataAccess(fluxView.getContext());
-            title_flux = (fluxView.findViewById(R.id.titleFlux)).toString();
+        }
+
+        @Override
+        public void onClick(View v) {
+            db = new DataAccess(v.getContext());
+            TextView tv = (TextView)v.findViewById(R.id.titleFlux);
+            title_flux = tv.getText().toString();
             id_flux = db.getIdFlux(title_flux);
-            fluxView.setClickable(true);
-            fluxView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO : lancer Fragment avec liste de RSS
-                    //Intent i = new Intent(fluxView.getContext(), MainActivity.class);
-                    //fluxView.getContext().startActivity(i);
-                    f = ((FragmentActivity) fluxView.getContext()).getSupportFragmentManager();
-                    FragmentTransaction t = f.beginTransaction();
-                    ListeRSS p = ListeRSS.newInstance(id_flux);
-                    p.setContentResolver(fluxView.getContext());
-                    //TODO : continuer pour lancer Fragment
-                    t.add(R.id.liste_fragment_frame, p);
-                    t.commit();
-                    System.out.println("TEST::::::::::::::::::::::::");
-                }
-            });
+            System.out.println("TEST3::::::::::::::"+Integer.toString(id_flux));
+            //id_flux = 1;
+            Intent t = new Intent(v.getContext(), AfficheRSS.class);
+            t.putExtra("id_flux", id_flux);
+            v.getContext().startActivity(t);
+            /*
+            f = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
+            FragmentTransaction t = f.beginTransaction();
+            ListeRSS p = ListeRSS.newInstance(id_flux);
+            p.setContentResolver(v.getContext());
+            //TODO : continuer pour lancer Fragment
+            t.replace(R.id.liste_fragment_frame, p);
+            t.commit();
+            System.out.println("TEST::::::::::::::::::::::::");
+            */
         }
     }
 

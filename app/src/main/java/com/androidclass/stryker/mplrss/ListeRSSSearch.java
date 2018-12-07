@@ -42,7 +42,6 @@ public class ListeRSSSearch extends ListFragment implements LoaderManager.Loader
 
     // TODO: Rename and change types of parameters
     private String titleRSS;
-    private String descriptionRSS;
 
     private ListeRSSSearch.OnFragmentInteractionListener mListener;
 

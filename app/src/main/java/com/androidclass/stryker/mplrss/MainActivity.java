@@ -58,7 +58,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragmentInteractionListener, ListeRSSFav.OnFragmentInteractionListener, ListeRSSSearch.OnFragmentInteractionListener  {
+public class MainActivity extends AppCompatActivity {
     TextView tv;
     private FragmentManager f;
     ProgressBar pb;
@@ -263,7 +263,6 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
                     public void onClick(DialogInterface dialog, int id) {
                         String adresse = et.getText().toString();
                         Toast.makeText(MainActivity.this, "téléchargement de: " + adresse, Toast.LENGTH_SHORT).show();
-                        //TODO: recuperer le string passé à l'alertDialog
                         if(!adresse.isEmpty()){
                             load(adresse);
                         }
@@ -389,33 +388,4 @@ public class MainActivity extends AppCompatActivity  implements ListeRSS.OnFragm
 
     }
 
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onRSSSelection(String title) {
-        UnRSS u = UnRSS.newInstance(title, false);
-        u.setContentResolver(MainActivity.this);
-        FragmentTransaction t = f.beginTransaction();
-        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
-        t.replace(R.id.liste_fragment_frame, u);
-        t.addToBackStack(null);
-        //t.addToBackStack(null);FragmentTransaction t;
-        t.commit();
-    }
-
-    @Override
-    public void onRSSSelectionFav(String title) {
-        UnRSS u = UnRSS.newInstance(title, true);
-        u.setContentResolver(MainActivity.this);
-        FragmentTransaction t = f.beginTransaction();
-        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
-        t.replace(R.id.liste_fragment_frame, u);
-        t.addToBackStack(null);
-        //t.addToBackStack(null);FragmentTransaction t;
-        t.commit();
-    }
 }
