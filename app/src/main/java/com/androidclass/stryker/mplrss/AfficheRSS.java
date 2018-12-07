@@ -81,7 +81,11 @@ public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragment
                 return true;
 
             case R.id.mes_rss:
-
+                FragmentTransaction t = f.beginTransaction();
+                ListeRSSFav p = ListeRSSFav.newInstance();
+                t.replace(R.id.liste_fragment_frame, p);
+                t.addToBackStack(null);
+                t.commit();
                 return true;
 
             case R.id.search:
@@ -89,14 +93,23 @@ public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragment
                     @Override
                     public boolean onQueryTextSubmit(String query) {
 
-                        Log.d("SearchOnQueryText: ", query);
-                        if (!searchView.isIconified()) {
+                        f = getSupportFragmentManager();
+                        FragmentTransaction t = f.beginTransaction();
+                        ListeRSSSearch p = ListeRSSSearch.newInstance(query);
+                        p.setContentResolver(AfficheRSS.this);
+
+                        t.replace(R.id.liste_fragment_frame, p);
+                        t.addToBackStack(null);
+                        t.commit();
+
+
+                        Log.d( "SearchOnQueryTextSubmit: ", query);
+                        if( ! searchView.isIconified()) {
                             searchView.setIconified(true);
                         }
                         item2.collapseActionView();
                         return false;
                     }
-
                     @Override
                     public boolean onQueryTextChange(String s) {
                         // UserFeedback.show( "SearchOnQueryTextChanged: " + s);

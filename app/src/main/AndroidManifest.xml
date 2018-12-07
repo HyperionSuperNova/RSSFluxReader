@@ -29,7 +29,11 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".Notification_Download"
+            android:exported="false" />
 
+        <activity android:name=".AfficheRSS"></activity>
     </application>
 
 </manifest>
