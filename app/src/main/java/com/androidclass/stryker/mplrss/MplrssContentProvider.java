@@ -69,31 +69,6 @@ public class MplrssContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    /*@Override
-    public Uri insert(Uri uri, ContentValues values) {
-        SQLiteDatabase db = base.getWritableDatabase();
-        int code = uriMatcher.match(uri);
-        Log.d(LOG, "Uri=" + uri.toString());
-        long id = 0;
-        String path;
-        switch (code) {
-            case TABLE_RSS:
-                id = db.insert("rss",null, values);
-                path = "rss";
-                break;
-            case COLONNE_TITLE:
-                String pays = uri.getPathSegments().get(1);
-                //System.out.println("TEST::::::" + pays + "    " + annee);
-            default:
-                throw new UnsupportedOperationException("this insert not yet implemented");
-        }
-        Uri.Builder builder = (new Uri.Builder())
-                .authority(authority)
-                .appendPath(path);
-
-        return ContentUris.appendId(builder, id).build();
-    }*/
-
     @Override
     public boolean onCreate() {
         base = Base.getInstance(getContext());

@@ -6,28 +6,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.zip.Inflater;
 
 
 /**
@@ -129,14 +115,6 @@ public class UnRSS extends Fragment {
                 //TODO mettre RSS dans liste utilisateur
                 Uri.Builder builder = new Uri.Builder();
                 Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
-
-                /*
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.DATE, 1);
-                Date d = cal.getTime();
-                SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy");
-                String currentDate = format.format(d);
-                */
 
                 ContentValues c = new ContentValues();
                 c.put("choisi", 1);
