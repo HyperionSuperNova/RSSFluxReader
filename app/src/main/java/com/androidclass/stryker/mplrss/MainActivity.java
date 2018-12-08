@@ -53,6 +53,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     List<XmlParser> xp = al.get(1);
                     for(XmlParser x : xp){
-                        ad.ajoutItems(x.title,id,x.link,x.description,x.datepub);
+                        ad.ajoutItems(x.title,id,x.link,x.description,x.datepub, x.dateChoisi);
                     }
 
                 } catch (XmlPullParserException | IOException e) {
@@ -223,7 +224,13 @@ public class MainActivity extends AppCompatActivity {
                 if (title != null && link != null && description != null) {
                     if (isItem) {
                         String formattedDate = dateFormater(dateLastChange, "yyyy-MM-dd","EEE, dd MMM yyyy HH:mm:ss Z");
-                        XmlParser item = new XmlParser(title, link, description,formattedDate);
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.DATE, 1);
+                        Date d = cal.getTime();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        String dateChoisi = format.format(d);
+                        // TODO : faire date choisi
+                        XmlParser item = new XmlParser(title, link, description,formattedDate, dateChoisi);
                         items.add(item);
 
                     } else {
@@ -231,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                         mFeedLink = link;
                         mFeedDescription = description;
                         mFeedDateLastChange = dateLastChange;
-                        items2.add(new Flux(mFeedLink,mFeedTitle,description, dateLastChange));
+                        items2.add(new Flux(mFeedLink,mFeedTitle,description));
 
 
                     }
@@ -345,83 +352,4 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-    public List<XmlParser> parseFeed(InputStream inputStream) throws XmlPullParserException,
-            IOException, ParseException {
-
-        String title = null;
-        String link = null;
-        String description = null;
-        boolean isItem = false;
-        List<XmlParser> items = new ArrayList<>();
-
-        try {
-            XmlPullParser xmlPullParser = Xml.newPullParser();
-            xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            xmlPullParser.setInput(inputStream, null);
-
-            xmlPullParser.nextTag();
-            while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) {
-                int eventType = xmlPullParser.getEventType();
-
-                String name = xmlPullParser.getName();
-                if (name == null)
-                    continue;
-
-                if (eventType == XmlPullParser.END_TAG) {
-                    if (name.equalsIgnoreCase("item")) {
-                        isItem = false;
-                    }
-                    continue;
-                }
-
-                if (eventType == XmlPullParser.START_TAG) {
-                    if (name.equalsIgnoreCase("item")) {
-                        isItem = true;
-                        continue;
-                    }
-                }
-
-                Log.d("MyXmlParser", "Parsing name ==> " + name);
-                String result = "";
-                if (xmlPullParser.next() == XmlPullParser.TEXT) {
-                    result = xmlPullParser.getText();
-                    xmlPullParser.nextTag();
-                }
-
-                if (name.equalsIgnoreCase("title")) {
-                    title = result;
-                } else if (name.equalsIgnoreCase("link")) {
-                    link = result;
-                } else if (name.equalsIgnoreCase("description")) {
-                    description = result;
-                }else if(name.equalsIgnoreCase("pubDate")){
-                    //date = formatter.parse(result);
-                }
-
-                if (title != null && link != null && description != null) {
-                    if (isItem) {
-                        XmlParser item = new XmlParser(title, link, description,"");
-                        items.add(item);
-                    } else {
-                        mFeedTitle = title;
-                        mFeedLink = link;
-                        mFeedDescription = description;
-
-                    }
-
-                    title = null;
-                    link = null;
-                    description = null;
-                    isItem = false;
-                }
-            }
-
-        } finally {
-            inputStream.close();
-        }
-        return items;
-
-    }
-
 }
