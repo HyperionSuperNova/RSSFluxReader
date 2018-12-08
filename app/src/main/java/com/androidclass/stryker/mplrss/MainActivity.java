@@ -151,12 +151,12 @@ public class MainActivity extends AppCompatActivity {
                     int id = -1;
                     for(Flux f : tmp){
                         fluxList.add(f);
-                        ad.ajoutFlux(f.link,f.title,f.description);
+                        ad.ajoutFlux(f.link,f.title,f.description, f.dateChoisi);
                         id = ad.getIdFlux(f.title);
                     }
                     List<XmlParser> xp = al.get(1);
                     for(XmlParser x : xp){
-                        ad.ajoutItems(x.title,id,x.link,x.description,x.datepub, x.dateChoisi);
+                        ad.ajoutItems(x.title,id,x.link,x.description,x.datepub);
                     }
 
                 } catch (XmlPullParserException | IOException e) {
@@ -233,21 +233,21 @@ public class MainActivity extends AppCompatActivity {
                 if (title != null && link != null && description != null) {
                     if (isItem) {
                         String formattedDate = dateFormater(dateLastChange, "yyyy-MM-dd","EEE, dd MMM yyyy HH:mm:ss Z");
-                        Calendar cal = Calendar.getInstance();
-                        cal.add(Calendar.DATE, 1);
-                        Date d = cal.getTime();
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        String dateChoisi = format.format(d);
+
                         // TODO : faire date choisi
-                        XmlParser item = new XmlParser(title, link, description,formattedDate, dateChoisi);
+                        XmlParser item = new XmlParser(title, link, description,formattedDate);
                         items.add(item);
 
                     } else {
                         mFeedTitle = title;
                         mFeedLink = link;
                         mFeedDescription = description;
-                        mFeedDateLastChange = dateLastChange;
-                        items2.add(new Flux(mFeedLink,mFeedTitle,description));
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.DATE, 1);
+                        Date d = cal.getTime();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        String dateChoisi = format.format(d);
+                        items2.add(new Flux(mFeedLink,mFeedTitle,description, dateChoisi));
 
 
                     }

@@ -36,11 +36,12 @@ public class DataAccess {
         this.cr = c.getContentResolver();
     }
 
-    public void ajoutFlux(String link, String title,String description){
+    public void ajoutFlux(String link, String title,String description, String dateChoisi){
         ContentValues cv = new ContentValues();
         cv.put(COLONNE_FLUX,link);
         cv.put(COLONNE_TITLEFLUX,title);
         cv.put(COLONNE_DESCFLUX,description);
+        cv.put(COLONNE_DATE_CHOISI, dateChoisi);
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("content").authority("fr.cartman.respect.my.authority").appendPath(TABLE_FLUX);
         Uri uri = builder.build();
@@ -57,14 +58,13 @@ public class DataAccess {
         return c.getInt(c.getColumnIndexOrThrow("id"));
     }
 
-    public void ajoutItems(String title, int idFlux, String link, String description, String pubDate, String dateChoisi){
+    public void ajoutItems(String title, int idFlux, String link, String description, String pubDate){
         ContentValues cv = new ContentValues();
         cv.put(COLONNE_TITLE,title);
         cv.put(COLONNE_IDFLUX,idFlux);
         cv.put(COLONNE_ITEM,link);
         cv.put(COLONNE_DESCRIPTION,description);
         cv.put(COLONNE_DATE_LAST_CHANGE,pubDate);
-        cv.put(COLONNE_DATE_CHOISI, dateChoisi);
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("content").authority("fr.cartman.respect.my.authority").appendPath(TABLE_RSS);
         Uri uri = builder.build();
@@ -83,7 +83,8 @@ public class DataAccess {
                 String link = c.getString(c.getColumnIndexOrThrow(COLONNE_FLUX));
                 String title = c.getString(c.getColumnIndexOrThrow(COLONNE_TITLEFLUX));
                 String description = c.getString(c.getColumnIndexOrThrow(COLONNE_DESCFLUX));
-                f.add(new Flux(link,title,description));
+                String dateChoisi = c.getString(c.getColumnIndexOrThrow(COLONNE_DATE_CHOISI));
+                f.add(new Flux(link,title,description, dateChoisi));
             }
         }
         c.close();
