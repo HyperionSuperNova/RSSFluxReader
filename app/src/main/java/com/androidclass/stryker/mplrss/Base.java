@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 public class Base extends SQLiteOpenHelper {
 
-    public final static int VERSION = 46;
+    public final static int VERSION = 47;
     public final static String DB_NAME = "base_rss";
     public final static String TABLE_RSS = "rss";
     public final static String COLONNE_TITLE = "title";
