@@ -31,6 +31,7 @@ public class DataAccess {
     public final static String COLONNE_TITLEFLUX = "fluxTitle";
     public final static String COLONNE_DESCFLUX = "fluxDescription";
 
+
     public DataAccess(Context c){
         this.cr = c.getContentResolver();
     }
@@ -87,5 +88,13 @@ public class DataAccess {
         }
         c.close();
         return f;
+    }
+
+    public int deleteItem(int id){
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("content").authority(authority).appendPath(TABLE_FLUX).appendPath(id+"");
+        Uri uri = builder.build();
+        int ret = cr.delete(uri,null,null);
+        return ret;
     }
 }

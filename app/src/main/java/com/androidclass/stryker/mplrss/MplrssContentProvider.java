@@ -27,6 +27,7 @@ public class MplrssContentProvider extends ContentProvider {
     public final static int COLONNE_SEARCH = 5;
     public final static int COLONNE_CHOISI = 6;
     public final static int CODE_FLUX = 10;
+    public final static int CODE_FLUXDEL = 11;
 
     private final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -38,6 +39,7 @@ public class MplrssContentProvider extends ContentProvider {
         uriMatcher.addURI(authority, "rss/choisi", COLONNE_CHOISI);
         uriMatcher.addURI(authority, "rss/search", COLONNE_SEARCH);
         uriMatcher.addURI(authority, "flux", CODE_FLUX);
+        uriMatcher.addURI(authority, "flux/#", CODE_FLUXDEL);
     }
 
     public MplrssContentProvider() {
@@ -46,7 +48,18 @@ public class MplrssContentProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        SQLiteDatabase sdb = base.getWritableDatabase();
+        int code = uriMatcher.match(uri);
+        int id;
+        switch(code){
+            case CODE_FLUXDEL:
+                id = sdb.delete("flux","id=?", new String[]{uri.getLastPathSegment()});
+                id = sdb.delete("rss","id_flux=? and choisi=?",new String[]{uri.getLastPathSegment(),"0"});
+                break;
+            default:
+                throw new UnsupportedOperationException("Not yet implemented");
+        }
+        return id;
     }
 
     @Override

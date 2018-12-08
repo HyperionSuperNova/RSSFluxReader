@@ -26,6 +26,7 @@ public class Base extends SQLiteOpenHelper {
     public final static String COLONNE_DESCFLUX = "fluxDescription";
 
 
+
     public final static String CREATE_RSS = "create table " + TABLE_RSS + "(" +
             COLONNE_TITLE + " string primary key, " +
             COLONNE_IDFLUX + " integer, " +

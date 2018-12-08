@@ -58,6 +58,8 @@ public class FluxAdapter extends RecyclerView.Adapter<FluxAdapter.FeedModelViewH
             System.out.println("TEST::::::::::::::::::::::::");
             */
         }
+
+
     }
 
     public FluxAdapter(List<Flux> flux) {
