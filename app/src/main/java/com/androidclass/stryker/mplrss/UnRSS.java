@@ -3,17 +3,34 @@ package com.androidclass.stryker.mplrss;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.zip.Inflater;
 
 
 /**
@@ -99,6 +116,7 @@ public class UnRSS extends Fragment {
 
         Button maListe = (Button) v.findViewById(R.id.maListe);
         Button sup = (Button) v.findViewById(R.id.supprimer);
+        Button open = (Button) v.findViewById(R.id.gotoBrowser);
 
         if(favRSS){
             maListe.setVisibility(View.INVISIBLE);
@@ -108,6 +126,16 @@ public class UnRSS extends Fragment {
             maListe.setVisibility(View.VISIBLE);
         }
 
+        open.setVisibility(View.VISIBLE);
+
+        open.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iii = new Intent(Intent.ACTION_VIEW);
+                iii.setData(Uri.parse(link.getText().toString().trim()));
+                startActivity(iii);
+            }
+        });
 
         maListe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +143,14 @@ public class UnRSS extends Fragment {
                 //TODO mettre RSS dans liste utilisateur
                 Uri.Builder builder = new Uri.Builder();
                 Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
+
+                /*
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DATE, 1);
+                Date d = cal.getTime();
+                SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy");
+                String currentDate = format.format(d);
+                */
 
                 ContentValues c = new ContentValues();
                 c.put("choisi", 1);
@@ -139,7 +175,10 @@ public class UnRSS extends Fragment {
             }
         });
 
+
+
         return v;
     }
+
 }
 

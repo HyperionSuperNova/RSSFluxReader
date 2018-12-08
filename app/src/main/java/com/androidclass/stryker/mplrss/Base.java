@@ -1,19 +1,21 @@
 package com.androidclass.stryker.mplrss;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 
 public class Base extends SQLiteOpenHelper {
 
-    public final static int VERSION = 49;
+    public final static int VERSION = 50;
     public final static String DB_NAME = "base_rss";
     public final static String TABLE_RSS = "rss";
     public final static String COLONNE_TITLE = "title";
     public final static String COLONNE_ITEM = "link";
     public final static String COLONNE_DESCRIPTION = "description";
     public final static String COLONNE_DATE_LAST_CHANGE = "date_last_change";
-
+    public final static String COLONNE_DATE_CHOISI = "date_choisi";
     public final static String COLONNE_CHOISI = "choisi";
     public final static String COLONNE_IDFLUX = "id_flux";
 
@@ -22,7 +24,6 @@ public class Base extends SQLiteOpenHelper {
     public final static String COLONNE_FLUX = "fluxLink";
     public final static String COLONNE_TITLEFLUX = "fluxTitle";
     public final static String COLONNE_DESCFLUX = "fluxDescription";
-    public final static String COLONNE_DATE_CHOISI = "date_choisi";
 
 
 
@@ -32,6 +33,7 @@ public class Base extends SQLiteOpenHelper {
             COLONNE_ITEM + " string, " +
             COLONNE_DESCRIPTION + " string, " +
             COLONNE_DATE_LAST_CHANGE + " string, " +
+            COLONNE_DATE_CHOISI + " string, " +
             COLONNE_CHOISI + " integer default 0, " +
             "FOREIGN KEY(id_flux) REFERENCES flux(id)" +
             ");";
@@ -40,8 +42,7 @@ public class Base extends SQLiteOpenHelper {
             COLONNE_ID +" integer primary key autoincrement, "+
             COLONNE_FLUX + " string, " +
             COLONNE_TITLEFLUX + " string, " +
-            COLONNE_DESCFLUX + " string," +
-            COLONNE_DATE_CHOISI + " string " +
+            COLONNE_DESCFLUX + " string" +
             ");";
 
     private static Base ourInstance;
