@@ -53,8 +53,8 @@ public class MplrssContentProvider extends ContentProvider {
         int id;
         switch(code){
             case CODE_FLUXDEL:
-                id = sdb.delete("flux","id=?", new String[]{uri.getLastPathSegment()});
                 id = sdb.delete("rss","id_flux=? and choisi=?",new String[]{uri.getLastPathSegment(),"0"});
+                id = sdb.delete("flux","id=?", new String[]{uri.getLastPathSegment()});
                 break;
             default:
                 throw new UnsupportedOperationException("Not yet implemented");

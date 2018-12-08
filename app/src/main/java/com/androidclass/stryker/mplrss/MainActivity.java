@@ -55,6 +55,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     FluxAdapter adapt;
     SwipeController sp;
+    private String mFeedDateLastChange;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(cur != null);
         if (cur != null) {
             ParcelFileDescriptor pDesc = null;
+            ParcelFileDescriptor pDesc2 = null;
 
             try {
                 pDesc = dm.openDownloadedFile(id);
@@ -143,17 +146,17 @@ public class MainActivity extends AppCompatActivity {
             if (pDesc != null) {
                 FileDescriptor desc = pDesc.getFileDescriptor();
                 try {
-                    ArrayList<List> al = parseName(new FileInputStream(desc));
-                    List<Flux> tmp = al.get(0);
+                    ArrayList<List> al =parseName(new FileInputStream(desc));
+                    List <Flux> tmp = al.get(0);
                     int id = -1;
-                    for (Flux f : tmp) {
+                    for(Flux f : tmp){
                         fluxList.add(f);
-                        ad.ajoutFlux(f.link, f.title, f.description);
+                        ad.ajoutFlux(f.link,f.title,f.description);
                         id = ad.getIdFlux(f.title);
                     }
                     List<XmlParser> xp = al.get(1);
-                    for (XmlParser x : xp) {
-                        ad.ajoutItems(x.title, id, x.link, x.description, x.datepub);
+                    for(XmlParser x : xp){
+                        ad.ajoutItems(x.title,id,x.link,x.description,x.datepub, x.dateChoisi);
                     }
 
                 } catch (XmlPullParserException | IOException e) {
@@ -170,16 +173,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     public ArrayList<List> parseName(InputStream inputStream) throws XmlPullParserException, IOException {
         String title = null;
         String link = null;
         String description = null;
+        String dateLastChange = null;
         boolean isItem = false;
         String pubDate = null;
         List<XmlParser> items = new ArrayList<>();
         List<Flux> items2 = new ArrayList<>();
         ArrayList<List> al = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
         try {
             XmlPullParser xmlPullParser = Xml.newPullParser();
             xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -220,19 +224,32 @@ public class MainActivity extends AppCompatActivity {
                     link = result;
                 } else if (name.equalsIgnoreCase("description")) {
                     description = result;
-                } else if (name.equalsIgnoreCase("pubdate")) {
-                    //pubDate = sdf.parse(result).toString();
+
+                }else if (name.equalsIgnoreCase("pubDate")) {
+                    dateLastChange = result;
+
                 }
 
                 if (title != null && link != null && description != null) {
                     if (isItem) {
-                        XmlParser item = new XmlParser(title, link, description, pubDate);
+                        String formattedDate = dateFormater(dateLastChange, "yyyy-MM-dd","EEE, dd MMM yyyy HH:mm:ss Z");
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.DATE, 1);
+                        Date d = cal.getTime();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        String dateChoisi = format.format(d);
+                        // TODO : faire date choisi
+                        XmlParser item = new XmlParser(title, link, description,formattedDate, dateChoisi);
                         items.add(item);
+
                     } else {
                         mFeedTitle = title;
                         mFeedLink = link;
                         mFeedDescription = description;
-                        items2.add(new Flux(mFeedLink, mFeedTitle, description));
+                        mFeedDateLastChange = dateLastChange;
+                        items2.add(new Flux(mFeedLink,mFeedTitle,description));
+
+
                     }
 
                     title = null;
@@ -242,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-        } finally {
+        }finally {
             inputStream.close();
         }
         al.add(items2);
@@ -251,6 +268,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public static String dateFormater(String dateFromJSON, String expectedFormat, String oldFormat) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(oldFormat, Locale.ENGLISH);
+        Date date = null;
+        String convertedDate = null;
+        try {
+            date = dateFormat.parse(dateFromJSON);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(expectedFormat, Locale.ENGLISH);
+            convertedDate = simpleDateFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -344,84 +375,6 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
-    }
-
-    public List<XmlParser> parseFeed(InputStream inputStream) throws XmlPullParserException,
-            IOException, ParseException {
-
-        String title = null;
-        String link = null;
-        String description = null;
-        boolean isItem = false;
-        List<XmlParser> items = new ArrayList<>();
-
-        try {
-            XmlPullParser xmlPullParser = Xml.newPullParser();
-            xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            xmlPullParser.setInput(inputStream, null);
-
-            xmlPullParser.nextTag();
-            while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) {
-                int eventType = xmlPullParser.getEventType();
-
-                String name = xmlPullParser.getName();
-                if (name == null)
-                    continue;
-
-                if (eventType == XmlPullParser.END_TAG) {
-                    if (name.equalsIgnoreCase("item")) {
-                        isItem = false;
-                    }
-                    continue;
-                }
-
-                if (eventType == XmlPullParser.START_TAG) {
-                    if (name.equalsIgnoreCase("item")) {
-                        isItem = true;
-                        continue;
-                    }
-                }
-
-                Log.d("MyXmlParser", "Parsing name ==> " + name);
-                String result = "";
-                if (xmlPullParser.next() == XmlPullParser.TEXT) {
-                    result = xmlPullParser.getText();
-                    xmlPullParser.nextTag();
-                }
-
-                if (name.equalsIgnoreCase("title")) {
-                    title = result;
-                } else if (name.equalsIgnoreCase("link")) {
-                    link = result;
-                } else if (name.equalsIgnoreCase("description")) {
-                    description = result;
-                } else if (name.equalsIgnoreCase("pubDate")) {
-                    //date = formatter.parse(result);
-                }
-
-                if (title != null && link != null && description != null) {
-                    if (isItem) {
-                        XmlParser item = new XmlParser(title, link, description, "");
-                        items.add(item);
-                    } else {
-                        mFeedTitle = title;
-                        mFeedLink = link;
-                        mFeedDescription = description;
-
-                    }
-
-                    title = null;
-                    link = null;
-                    description = null;
-                    isItem = false;
-                }
-            }
-
-        } finally {
-            inputStream.close();
-        }
-        return items;
-
     }
 
 }

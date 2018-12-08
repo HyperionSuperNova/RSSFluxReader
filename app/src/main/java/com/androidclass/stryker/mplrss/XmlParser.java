@@ -35,42 +35,4 @@ public class XmlParser {
         this.dateChoisi = dateChoisi;
     }
 
-    public Document uriReader(String uri_path){
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db;
-        try {
-            db = dbf.newDocumentBuilder();
-            try {
-                return db.parse(uri_path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
-                e.printStackTrace();
-            }
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public HashMap<String,ArrayList<String>> content(Document doc){
-        HashMap <String,ArrayList<String>> tree = new HashMap<>();
-        NodeList nl = doc.getElementsByTagName("channel");
-        //NodeList nl2 = doc.getElementsByTagName("link");
-        //NodeList nl3 = doc.getElementsByTagName("description");
-        tree.put("title",nodesToArray(nl));
-        //tree.put("description",nodesToArray(nl2));
-        //tree.put("link",nodesToArray(nl3));
-        return tree;
-    }
-
-    public ArrayList<String> nodesToArray(NodeList nl){
-        ArrayList <String> al = new ArrayList<>();
-        for(int i = 0; i < nl.getLength();i++){
-            al.add(nl.item(i).getTextContent());
-        }
-        return al;
-    }
-
-
 }
