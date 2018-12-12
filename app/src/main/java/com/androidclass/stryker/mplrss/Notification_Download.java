@@ -2,6 +2,7 @@ package com.androidclass.stryker.mplrss;
 
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -44,7 +45,9 @@ public class Notification_Download extends IntentService {
                 ii.putExtra("id_flux", id_flux );
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, ii, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                nm.notify(1, monBuilder(adresse).setContentIntent(pendingIntent).build());
+                NotificationCompat.Builder monBuilder = monBuilder(adresse);
+                nm.notify(1, monBuilder.setContentIntent(pendingIntent).build());
+                monBuilder.setAutoCancel(true);
 
             }
         }
@@ -62,7 +65,7 @@ public class Notification_Download extends IntentService {
     */
 
     private NotificationCompat.Builder monBuilder(String message){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID).setAutoCancel(true);
         return builder.setSmallIcon(android.R.drawable.ic_dialog_info). setContentTitle("Téléchargement Terminé").setContentText(message);
     }
 
