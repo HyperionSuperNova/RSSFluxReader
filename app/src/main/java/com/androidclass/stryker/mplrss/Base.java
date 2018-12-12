@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 public class Base extends SQLiteOpenHelper {
 
-    public final static int VERSION = 50;
+    public final static int VERSION = 53;
     public final static String DB_NAME = "base_rss";
     public final static String TABLE_RSS = "rss";
     public final static String COLONNE_TITLE = "title";
@@ -28,8 +28,7 @@ public class Base extends SQLiteOpenHelper {
 
 
     public final static String CREATE_RSS = "create table " + TABLE_RSS + "(" +
-            COLONNE_ID +" integer primary key autoincrement, "+
-            COLONNE_TITLE + " string, " +
+            COLONNE_TITLE + " string primary key, " +
             COLONNE_IDFLUX + " integer, " +
             COLONNE_ITEM + " string, " +
             COLONNE_DESCRIPTION + " string, " +

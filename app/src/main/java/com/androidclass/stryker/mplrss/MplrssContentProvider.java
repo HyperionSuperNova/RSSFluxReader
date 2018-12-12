@@ -144,43 +144,7 @@ public class MplrssContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        SQLiteDatabase db = base.getReadableDatabase();
-        int code = uriMatcher.match(uri);
-        switch (code) {
-            case TABLE_RSS:
-                db.update("rss", values, selection, selectionArgs);
-                return 1;
-            case COLONNE_CHOISI:
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.DATE, 1);
-                Date d = cal.getTime();
-                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-                //String currentDate = format.format(d);
-
-                selection = "choisi = 1";
-                String date_choix = "";
-                selectionArgs = new String[]{date_choix};
-                Cursor cursor = db.query("rss", new String[]{"date_choisi"}, selection, selectionArgs, null, null, null);
-
-                if (cursor.getCount() == 0) {
-                    return -1;
-                }
-                cursor.moveToFirst();
-                date_choix = cursor.getString(cursor.getColumnIndex("date_choisi"));
-
-                try {
-                    Date databaseResult = format.parse(date_choix);
-                    long diffDate = d.getTime() - databaseResult.getTime();
-                    System.out.println("TEST::::" + diffDate);
-                    if (diffDate > 3) {
-                        db.update("rss", values, selection, selectionArgs);
-                    }
-                } catch (ParseException p) {
-                }
-                return 1;
-            default:
                 return 0;
-        }
     }
 
 
