@@ -80,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     SwipeController sp;
     private String mFeedDateLastChange;
 
+    private int id_flux = 0;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                         ad.ajoutFlux(f.link,f.title,f.description, f.dateChoisi);
                         id = ad.getIdFlux(f.title);
                     }
+                    id_flux = id;
                     List<XmlParser> xp = al.get(1);
                     for(XmlParser x : xp){
                         ad.ajoutItems(x.title,id,x.link,x.description,x.datepub);
@@ -237,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
                 if (title != null && link != null && description != null && dateLastChange != null) {
                     if (isItem) {
                         String formattedDate = dateFormater(dateLastChange, "yyyy-MM-dd","EEE, dd MMM yyyy HH:mm:ss Z");
-                        // TODO : faire date choisi
                         XmlParser item = new XmlParser(title, link, description,formattedDate);
                         items.add(item);
                         Log.d("My XML PARSER", title + " " + link + " " + description + " " + " " + dateLastChange);
@@ -328,6 +330,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Intent i = new Intent(MainActivity.this, Notification_Download.class);
                         i.putExtra("adresse", adresse);
+                        i.putExtra("id_flux", Integer.toString(id_flux));
                         i.setAction("notif");
                         startService(i);
                     }

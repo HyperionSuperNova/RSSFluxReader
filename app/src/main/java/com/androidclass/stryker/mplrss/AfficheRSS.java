@@ -27,6 +27,7 @@ public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragment
         setContentView(R.layout.activity_affiche_rss);
         Bundle extras = getIntent().getExtras();
         int id_flux = extras.getInt("id_flux");
+        System.out.println("TEST4::::::::::::::::::::::::::::::"+id_flux);
         f = getSupportFragmentManager();
         FragmentTransaction t = f.beginTransaction();
         ListeRSS p = ListeRSS.newInstance(id_flux);

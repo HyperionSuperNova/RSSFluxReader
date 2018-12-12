@@ -36,24 +36,10 @@ public class FluxAdapter extends RecyclerView.Adapter<FluxAdapter.FeedModelViewH
             TextView tv = (TextView)v.findViewById(R.id.titleFlux);
             title_flux = tv.getText().toString();
             id_flux = db.getIdFlux(title_flux);
-            System.out.println("TEST3::::::::::::::"+Integer.toString(id_flux));
-            //id_flux = 1;
             Intent t = new Intent(v.getContext(), AfficheRSS.class);
             t.putExtra("id_flux", id_flux);
             v.getContext().startActivity(t);
-            /*
-            f = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
-            FragmentTransaction t = f.beginTransaction();
-            ListeRSS p = ListeRSS.newInstance(id_flux);
-            p.setContentResolver(v.getContext());
-            //TODO : continuer pour lancer Fragment
-            t.replace(R.id.liste_fragment_frame, p);
-            t.commit();
-            System.out.println("TEST::::::::::::::::::::::::");
-            */
         }
-
-
     }
 
     public FluxAdapter(List<Flux> flux) {

@@ -37,14 +37,14 @@ public class Notification_Download extends IntentService {
             final String action = intent.getAction();
             if (NOTIF.equals(action)) {
                 final String adresse = intent.getStringExtra("adresse");
-                //int n = handleActionNotification(adresse);
 
-                /*
-                Intent ii = new Intent(this, AfficheActivity.class); // TODO : créer fragment d'affichage des flux dl avec Fragment
-                ii.putExtra("nombre_premier", n );
+                int id_flux = Integer.parseInt(intent.getStringExtra("id_flux"))+1;
+
+                Intent ii = new Intent(this, AfficheRSS.class); // TODO : créer fragment d'affichage des flux dl avec Fragment
+                ii.putExtra("id_flux", id_flux );
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, ii, PendingIntent.FLAG_UPDATE_CURRENT);
-                */
-                nm.notify(1, monBuilder(adresse).build());//setContentIntent(pendingIntent).build());
+
+                nm.notify(1, monBuilder(adresse).setContentIntent(pendingIntent).build());
 
             }
         }

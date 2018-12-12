@@ -28,7 +28,8 @@ public class Base extends SQLiteOpenHelper {
 
 
     public final static String CREATE_RSS = "create table " + TABLE_RSS + "(" +
-            COLONNE_TITLE + " string primary key, " +
+            COLONNE_ID +" integer primary key autoincrement, "+
+            COLONNE_TITLE + " string, " +
             COLONNE_IDFLUX + " integer, " +
             COLONNE_ITEM + " string, " +
             COLONNE_DESCRIPTION + " string, " +
