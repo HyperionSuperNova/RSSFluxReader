@@ -114,6 +114,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             fluxList = new ArrayList<>();
         }
+
+        ArrayList<Integer> oldFlux = ad.getOldFlux();
+        for(Integer i: oldFlux){
+            ad.deleteItem(i);
+        }
     }
 
     private void load(String s) {

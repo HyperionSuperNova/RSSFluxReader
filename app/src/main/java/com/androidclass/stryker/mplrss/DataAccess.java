@@ -4,9 +4,13 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class DataAccess {
@@ -56,6 +60,31 @@ public class DataAccess {
         assert c != null;
         c.moveToFirst();
         return c.getInt(c.getColumnIndexOrThrow("id"));
+    }
+
+    public ArrayList<Integer> getOldFlux(){
+        ArrayList<Integer> id_flux = new ArrayList<Integer>();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 1);
+        Date currentDate = cal.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("content").authority("fr.cartman.respect.my.authority").appendPath(TABLE_FLUX);
+        Uri uri = builder.build();
+        Cursor c = cr.query(uri, new String[] {"id", "date_choisi"}, null, null, null, null);
+        assert c != null;
+        c.moveToFirst();
+        while(c.moveToNext()){
+            String dateChoisi = c.getString(c.getColumnIndexOrThrow("date_choisi"));
+            try {
+                Date d = format.parse(dateChoisi);
+                int monthCurrent = currentDate.getMonth();
+                int monthChoisi = d.getMonth();
+                if(monthCurrent - monthChoisi > 3)  id_flux.add(c.getInt(c.getColumnIndexOrThrow("id")));
+            }catch (ParseException e){}
+        }
+        return id_flux;
     }
 
     public void ajoutItems(String title, int idFlux, String link, String description, String pubDate){
