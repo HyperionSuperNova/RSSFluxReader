@@ -17,7 +17,7 @@ public class DataAccess {
     public ContentResolver cr;
     public final static String authority = "fr.cartman.respect.my.authority";
 
-    public final static int VERSION = 20;
+    public final static int VERSION = 23;
     public final static String TABLE_RSS = "rss";
     public final static String COLONNE_TITLE = "title";
     public final static String COLONNE_ITEM = "link";
@@ -40,7 +40,7 @@ public class DataAccess {
         this.cr = c.getContentResolver();
     }
 
-    public void ajoutFlux(String link, String title,String description, String dateChoisi){
+    public boolean ajoutFlux(String link, String title,String description, String dateChoisi){
         ContentValues cv = new ContentValues();
         cv.put(COLONNE_FLUX,link);
         cv.put(COLONNE_TITLEFLUX,title);
@@ -49,14 +49,20 @@ public class DataAccess {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("content").authority("fr.cartman.respect.my.authority").appendPath(TABLE_FLUX);
         Uri uri = builder.build();
-        uri = cr.insert(uri,cv);
+        Cursor c = cr.query(uri, new String[] {"*"}, "fluxTitle =?", new String[] {title}, null, null);
+        System.out.println("TEST34:::::::::::::::::::::::::::::::::::::::::"+ (c.getCount() == 0));
+        if(c.getCount() == 0){
+            uri = cr.insert(uri,cv);
+            return true;
+        }
+        return false;
     }
 
     public int getIdFlux(String title){
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("content").authority("fr.cartman.respect.my.authority").appendPath(TABLE_FLUX);
         Uri uri = builder.build();
-        Cursor c = cr.query(uri, new String[] {"id"}, "fluxTitle = ?", new String[] {title}, null, null);
+        Cursor c = cr.query(uri, new String[] {"rowid as id"}, "fluxTitle = ?", new String[] {title}, null, null);
         assert c != null;
         c.moveToFirst();
         return c.getInt(c.getColumnIndexOrThrow("id"));

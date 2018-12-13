@@ -117,10 +117,12 @@ public class MainActivity extends AppCompatActivity {
             fluxList = new ArrayList<>();
         }
 
+        /*
         ArrayList<Integer> oldFlux = ad.getOldFlux();
         for(Integer i: oldFlux){
             ad.deleteItem(i);
         }
+        */
     }
 
     private void load(String s) {
@@ -155,16 +157,21 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     ArrayList<List> al =parseName(new FileInputStream(desc));
                     List <Flux> tmp = al.get(0);
+                    System.out.println("TEST1::::::::::::::::::::::::::::::::::::::::::::::::::::::"+ al.get(0));
                     int id = -1;
+                    boolean ajout = false;
                     for(Flux f : tmp){
                         fluxList.add(f);
-                        ad.ajoutFlux(f.link,f.title,f.description, f.dateChoisi);
-                        id = ad.getIdFlux(f.title);
+                        ajout = ad.ajoutFlux(f.link,f.title,f.description, f.dateChoisi);
+                        if(ajout) id = ad.getIdFlux(f.title);
+                        System.out.println("TEST::::::::::::::::::::::::::::::::::::::::::::::::::::"+id+"     "+ f.link+"       "+f.title+"      "+ f.description);
                     }
-                    id_flux = id;
-                    List<XmlParser> xp = al.get(1);
-                    for(XmlParser x : xp){
-                        ad.ajoutItems(x.title,id,x.link,x.description,x.datepub);
+                    if(ajout) {
+                        id_flux = id;
+                        List<XmlParser> xp = al.get(1);
+                        for (XmlParser x : xp) {
+                            ad.ajoutItems(x.title, id, x.link, x.description, x.datepub);
+                        }
                     }
 
                 } catch (XmlPullParserException | IOException e) {
@@ -253,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                         mFeedLink = link;
                         mFeedDescription = description;
                         mFeedDateLastChange = dateLastChange;
-                        items2.add(new Flux(mFeedLink,mFeedTitle,description, dateChoisi));
+                        items2.add(new Flux(link,title,description, dateChoisi));
                     }
                     title = null;
                     link = null;
