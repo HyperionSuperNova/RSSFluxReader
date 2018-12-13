@@ -19,7 +19,7 @@ public class DataAccess {
     private Context context;
     public final static String authority = "fr.cartman.respect.my.authority";
 
-    public final static int VERSION = 23;
+    public final static int VERSION = 24;
     public final static String TABLE_RSS = "rss";
     public final static String COLONNE_TITLE = "title";
     public final static String COLONNE_ITEM = "link";
@@ -118,7 +118,7 @@ public class DataAccess {
         Uri uri = builder.build();
         Cursor c = cr.query(uri,null,null,null,null);
         if(c != null){
-            c.moveToFirst();
+            //c.moveToFirst();
             while(c.moveToNext()){
                 String link = c.getString(c.getColumnIndexOrThrow(COLONNE_FLUX));
                 String title = c.getString(c.getColumnIndexOrThrow(COLONNE_TITLEFLUX));

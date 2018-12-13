@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (XmlPullParserException | IOException e) {
                     e.printStackTrace();
                 }
+                fluxList = ad.storedFlux();
                 adapt = new FluxAdapter(fluxList);
                 mRecyclerView.setAdapter(adapt);
                 //mRecyclerView.setAdapter(new RssFeedListAdapter(mFeedModelList));
