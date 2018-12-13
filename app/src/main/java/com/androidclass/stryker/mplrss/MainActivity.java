@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
 import java.io.FileDescriptor;
@@ -117,12 +118,10 @@ public class MainActivity extends AppCompatActivity {
             fluxList = new ArrayList<>();
         }
 
-        /*
         ArrayList<Integer> oldFlux = ad.getOldFlux();
         for(Integer i: oldFlux){
             ad.deleteItem(i);
         }
-        */
     }
 
     private void load(String s) {
@@ -200,11 +199,16 @@ public class MainActivity extends AppCompatActivity {
         List<Flux> items2 = new ArrayList<>();
         ArrayList<List> al = new ArrayList<>();
         try {
-            XmlPullParser xmlPullParser = Xml.newPullParser();
-            xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            XmlPullParser xmlPullParser = factory.newPullParser();
+
+            //XmlPullParser xmlPullParser = Xml.newPullParser();
+            //xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             xmlPullParser.setInput(inputStream, null);
 
-            xmlPullParser.nextTag();
+            //xmlPullParser.nextTag();
             while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) {
                 int eventType = xmlPullParser.getEventType();
 
@@ -243,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 }else if (name.equalsIgnoreCase("pubDate")) {
                     dateLastChange = result;
                 }
-
+                if(!isItem) System.out.println("TEST55::::::::::::::::::::::::::::::::::::::::::::::"+ title + "      " + link + "     " + description + "       " + dateLastChange);
                 if (title != null && link != null && description != null && dateLastChange != null) {
                     if (isItem) {
                         String formattedDate = dateFormater(dateLastChange, "yyyy-MM-dd","EEE, dd MMM yyyy HH:mm:ss Z");

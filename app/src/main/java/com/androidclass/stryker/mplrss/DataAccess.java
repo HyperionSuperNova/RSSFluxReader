@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class DataAccess {
     public ContentResolver cr;
+    private Context context;
     public final static String authority = "fr.cartman.respect.my.authority";
 
     public final static int VERSION = 23;
@@ -38,6 +40,7 @@ public class DataAccess {
 
     public DataAccess(Context c){
         this.cr = c.getContentResolver();
+        this.context = c;
     }
 
     public boolean ajoutFlux(String link, String title,String description, String dateChoisi){
@@ -54,6 +57,8 @@ public class DataAccess {
         if(c.getCount() == 0){
             uri = cr.insert(uri,cv);
             return true;
+        }else{
+            Toast.makeText(context, "This rss is already downloaded.", Toast.LENGTH_LONG).show();
         }
         return false;
     }
