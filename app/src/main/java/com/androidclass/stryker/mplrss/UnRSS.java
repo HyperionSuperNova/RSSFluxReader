@@ -5,32 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.zip.Inflater;
 
 
 /**
@@ -40,7 +23,6 @@ import java.util.zip.Inflater;
  */
 public class UnRSS extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "titleRSS";
     private static final String ARG_PARAM2 = "fav";
 
@@ -58,7 +40,6 @@ public class UnRSS extends Fragment {
     private TextView description;
 
     public UnRSS() {
-        // Required empty public constructor
     }
 
     public void setContentResolver(Context context){
@@ -96,7 +77,6 @@ public class UnRSS extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_un_rss, container, false);
-        // Inflate the layout for this fragment
         title = (TextView) v.findViewById(R.id.title);
         link = (TextView) v.findViewById(R.id.link);
         description = (TextView) v.findViewById(R.id.description);
@@ -143,14 +123,6 @@ public class UnRSS extends Fragment {
                 //TODO mettre RSS dans liste utilisateur
                 Uri.Builder builder = new Uri.Builder();
                 Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
-
-                /*
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.DATE, 1);
-                Date d = cal.getTime();
-                SimpleDateFormat format = new SimpleDateFormat("dd MM yyyy");
-                String currentDate = format.format(d);
-                */
 
                 ContentValues c = new ContentValues();
                 c.put("choisi", 1);

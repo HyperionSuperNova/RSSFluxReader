@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -57,8 +56,6 @@ public class DataAccess {
         if(c.getCount() == 0){
             uri = cr.insert(uri,cv);
             return true;
-        }else{
-            Toast.makeText(context, "This rss is already downloaded.", Toast.LENGTH_LONG).show();
         }
         return false;
     }

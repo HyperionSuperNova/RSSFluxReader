@@ -1,18 +1,13 @@
 package com.androidclass.stryker.mplrss;
 
 import android.app.DownloadManager;
-import android.app.SearchManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.AssetManager;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
@@ -25,17 +20,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.util.Xml;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Adapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -45,25 +33,18 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.BufferedReader;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    TextView tv;
     private FragmentManager f;
     ProgressBar pb;
     DownloadManager dm;
@@ -71,15 +52,10 @@ public class MainActivity extends AppCompatActivity {
     long id;
     public DataAccess ad;
     RecyclerView mRecyclerView;
-    private List<XmlParser> mFeedModelList;
     private List<Flux> fluxList;
-    private String mFeedTitle;
-    private String mFeedLink;
-    private String mFeedDescription;
     private RecyclerView.LayoutManager mLayoutManager;
     FluxAdapter adapt;
     SwipeController sp;
-    private String mFeedDateLastChange;
 
     private int id_flux = 0;
 
@@ -134,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         DownloadManager.Request req = new DownloadManager.Request(uri);
         id = dm.enqueue(req);
         registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-        //ad.ajoutFlux(s,mFeedTitle);
     }
 
     private void act() {
@@ -179,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                 fluxList = ad.storedFlux();
                 adapt = new FluxAdapter(fluxList);
                 mRecyclerView.setAdapter(adapt);
-                //mRecyclerView.setAdapter(new RssFeedListAdapter(mFeedModelList));
 
             }
         } else {
@@ -204,12 +178,8 @@ public class MainActivity extends AppCompatActivity {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
             XmlPullParser xmlPullParser = factory.newPullParser();
-
-            //XmlPullParser xmlPullParser = Xml.newPullParser();
-            //xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             xmlPullParser.setInput(inputStream, null);
 
-            //xmlPullParser.nextTag();
             while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) {
                 int eventType = xmlPullParser.getEventType();
 
@@ -231,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                //Log.d("MyXmlParser", "Parsing name ==> " + name);
                 String result = "";
                 if (xmlPullParser.next() == XmlPullParser.TEXT) {
                     result = xmlPullParser.getText();
@@ -261,10 +230,6 @@ public class MainActivity extends AppCompatActivity {
                         Date d = cal.getTime();
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         String dateChoisi = format.format(d);
-                        mFeedTitle = title;
-                        mFeedLink = link;
-                        mFeedDescription = description;
-                        mFeedDateLastChange = dateLastChange;
                         items2.add(new Flux(link,title,description, dateChoisi));
                     }
                     title = null;
@@ -348,9 +313,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                // create alert dialog
                 AlertDialog alertDialog = alertDialogBuilder.create();
-                // show it
                 alertDialog.show();
 
                 return true;
@@ -380,15 +343,12 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
                         return false;
                     }
                 });
 
                 return true;
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
         }

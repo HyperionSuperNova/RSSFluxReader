@@ -1,11 +1,9 @@
 package com.androidclass.stryker.mplrss;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragmentInteractionListener, ListeRSSFav.OnFragmentInteractionListener, ListeRSSSearch.OnFragmentInteractionListener {
 
@@ -46,10 +42,8 @@ public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragment
         UnRSS u = UnRSS.newInstance(title, false);
         u.setContentResolver(AfficheRSS.this);
         FragmentTransaction t = f.beginTransaction();
-        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
         t.replace(R.id.liste_fragment_frame, u);
         t.addToBackStack(null);
-        //t.addToBackStack(null);FragmentTransaction t;
         t.commit();
     }
 
@@ -58,10 +52,8 @@ public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragment
         UnRSS u = UnRSS.newInstance(title, true);
         u.setContentResolver(AfficheRSS.this);
         FragmentTransaction t = f.beginTransaction();
-        //t.replace(R.id.liste_fragment_frame, ListPaysFragment.newInstance());
         t.replace(R.id.liste_fragment_frame, u);
         t.addToBackStack(null);
-        //t.addToBackStack(null);FragmentTransaction t;
         t.commit();
     }
 
@@ -114,15 +106,12 @@ public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragment
                     }
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
                         return false;
                     }
                 });
 
                 return true;
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
         }

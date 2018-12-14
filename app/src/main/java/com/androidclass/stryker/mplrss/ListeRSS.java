@@ -1,7 +1,6 @@
 package com.androidclass.stryker.mplrss;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,13 +12,9 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,16 +40,7 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
     private Cursor cursor;
 
 
-    public final static int VERSION = 9;
-    public final static String DB_NAME = "base_rss";
-    public final static String TABLE_RSS = "rss";
-    public final static String COLONNE_TITLE = "title";
-    public final static String COLONNE_LINK = "link";
-    public final static String COLONNE_DESCRIPTION = "description";
-    public final static String COLONNE_CHOISI = "choisi";
-
     public ListeRSS() {
-        // Required empty public constructor
     }
 
     public static ListeRSS newInstance(int id_flux) {
@@ -103,37 +89,6 @@ public class ListeRSS extends ListFragment implements LoaderManager.LoaderCallba
         String nom = c.getString(c.getColumnIndex("title"));
         mListener.onRSSSelection(nom);
     }
-
-    /*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        TextView textView = new TextView(getActivity());
-        textView.setText(R.string.hello_blank_fragment);
-        return textView;
-    }
-    */
-/*
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-    */
-
-    /*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-    */
 
     @Override
     public void onDetach() {

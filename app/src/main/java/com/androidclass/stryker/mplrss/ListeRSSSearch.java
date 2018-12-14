@@ -1,7 +1,6 @@
 package com.androidclass.stryker.mplrss;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,21 +12,10 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.zip.Inflater;
 
 
 /**
@@ -104,43 +92,8 @@ public class ListeRSSSearch extends ListFragment implements LoaderManager.Loader
     public void onListItemClick(ListView l, View v, int position, long id){
         Cursor c = (Cursor) getListAdapter().getItem(position);
         String nom = c.getString(c.getColumnIndex("title"));
-        /*
-        ContentValues cv = new ContentValues();
-        cv.put("date_choisi", "");
-        cv.put("choisi", 0);
-        Uri.Builder builder = new Uri.Builder();
-        Uri uri = builder.scheme("content").authority(authority).appendPath("rss").appendPath("date_choisi").build();
-        contentResolver.update(uri,cv, "title = ?", new String [] {nom});
-        */
         mListener.onRSSSelection(nom);
     }
-    /*
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_liste_rssfav, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-    */
 
     @Override
     public void onDetach() {
