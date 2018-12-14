@@ -24,11 +24,9 @@ import android.widget.TextView;
  * create an instance of this fragment.
  */
 public class ListeRSSSearch extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>  {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "titleRSS";
 
-    // TODO: Rename and change types of parameters
     private String titleRSS;
 
     private ListeRSSSearch.OnFragmentInteractionListener mListener;
@@ -57,7 +55,6 @@ public class ListeRSSSearch extends ListFragment implements LoaderManager.Loader
      * @param nomPays nom du pays.
      * @return A new instance of fragment ListRSSSearch.
      */
-    // TODO: Rename and change types and number of parameters
     public static ListeRSSSearch newInstance(String nomPays) {
         ListeRSSSearch fragment = new ListeRSSSearch();
         Bundle args = new Bundle();
@@ -142,7 +139,6 @@ public class ListeRSSSearch extends ListFragment implements LoaderManager.Loader
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void onRSSSelection(String title);
     }

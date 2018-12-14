@@ -8,12 +8,6 @@
         android:orderInCategory="1"
         app:showAsAction="collapseActionView|always" />
 
-    <item android:id="@+id/search"
-        android:title="rechercher"
-        android:orderInCategory="3"
-        app:showAsAction="collapseActionView|always"
-        app:actionViewClass="android.widget.SearchView" />
-
     <item android:id="@+id/mes_rss"
         android:title="Mes RSS"
         android:orderInCategory="4"

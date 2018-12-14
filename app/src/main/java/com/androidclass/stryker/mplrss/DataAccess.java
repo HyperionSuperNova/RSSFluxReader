@@ -52,7 +52,6 @@ public class DataAccess {
         builder.scheme("content").authority("fr.cartman.respect.my.authority").appendPath(TABLE_FLUX);
         Uri uri = builder.build();
         Cursor c = cr.query(uri, new String[] {"*"}, "fluxTitle =?", new String[] {title}, null, null);
-        System.out.println("TEST34:::::::::::::::::::::::::::::::::::::::::"+ (c.getCount() == 0));
         if(c.getCount() == 0){
             uri = cr.insert(uri,cv);
             return true;

@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(cur != null);
         if (cur != null) {
             ParcelFileDescriptor pDesc = null;
-            ParcelFileDescriptor pDesc2 = null;
 
             try {
                 pDesc = dm.openDownloadedFile(id);
@@ -131,14 +130,12 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     ArrayList<List> al =parseName(new FileInputStream(desc));
                     List <Flux> tmp = al.get(0);
-                    System.out.println("TEST1::::::::::::::::::::::::::::::::::::::::::::::::::::::"+ al.get(0));
                     int id = -1;
                     boolean ajout = false;
                     for(Flux f : tmp){
                         fluxList.add(f);
                         ajout = ad.ajoutFlux(f.link,f.title,f.description, f.dateChoisi);
                         if(ajout) id = ad.getIdFlux(f.title);
-                        System.out.println("TEST::::::::::::::::::::::::::::::::::::::::::::::::::::"+id+"     "+ f.link+"       "+f.title+"      "+ f.description);
                     }
                     if(ajout) {
                         id_flux = id;
@@ -169,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
         String description = null;
         String dateLastChange = null;
         boolean isItem = false;
-        String pubDate = null;
         List<XmlParser> items = new ArrayList<>();
         List<Flux> items2 = new ArrayList<>();
         ArrayList<List> al = new ArrayList<>();
@@ -217,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
                 }else if (name.equalsIgnoreCase("pubDate")) {
                     dateLastChange = result;
                 }
-                if(!isItem) System.out.println("TEST55::::::::::::::::::::::::::::::::::::::::::::::"+ title + "      " + link + "     " + description + "       " + dateLastChange);
                 if (title != null && link != null && description != null && dateLastChange != null) {
                     if (isItem) {
                         String formattedDate = dateFormater(dateLastChange, "yyyy-MM-dd","EEE, dd MMM yyyy HH:mm:ss Z");
@@ -315,37 +310,6 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
-
-                return true;
-
-            case R.id.search:
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-
-                        f = getSupportFragmentManager();
-                        FragmentTransaction t = f.beginTransaction();
-                        ListeRSSSearch p = ListeRSSSearch.newInstance(query);
-                        p.setContentResolver(MainActivity.this);
-
-                        t.replace(R.id.liste_fragment_frame, p);
-                        t.addToBackStack(null);
-                        t.commit();
-
-
-                        Log.d("SearchOnQueryTextSubmit: ", query);
-                        if (!searchView.isIconified()) {
-                            searchView.setIconified(true);
-                        }
-                        item2.collapseActionView();
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String s) {
-                        return false;
-                    }
-                });
 
                 return true;
             default:

@@ -59,7 +59,6 @@ public class MplrssContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        // TODO: Implement this to handle requests for the MIME type of the data
         // at the given URI.
         throw new UnsupportedOperationException("Not yet implemented");
     }
@@ -72,7 +71,6 @@ public class MplrssContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        // TODO: Implement this to handle requests to insert a new row.
         SQLiteDatabase sdb = base.getWritableDatabase();
         int code = uriMatcher.match(uri);
         long id;
@@ -119,7 +117,6 @@ public class MplrssContentProvider extends ContentProvider {
                 cursor = null;
                 break;
             case COLONNE_SEARCH:
-                System.out.println("TEST:::::::::::::::::::::::::  OUOUOUOUOU");
                 cursor = db.query("rss", projection, selection, selectionArgs, null, null, null);
                 break;
             case COLONNE_DESCRIPTION:
@@ -139,7 +136,9 @@ public class MplrssContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-                return 0;
+        SQLiteDatabase db = base.getReadableDatabase();
+        db.update("rss", values, selection, selectionArgs);
+        return 1;
     }
 
 

@@ -53,7 +53,6 @@ public class UnRSS extends Fragment {
      * @param nomPays nom du pays.
      * @return A new instance of fragment UnPaysFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static UnRSS newInstance(String nomPays, boolean fav) {
         UnRSS fragment = new UnRSS();
         Bundle args = new Bundle();
@@ -120,14 +119,13 @@ public class UnRSS extends Fragment {
         maListe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO mettre RSS dans liste utilisateur
                 Uri.Builder builder = new Uri.Builder();
-                Uri uri = builder.scheme("content").authority(authority).appendPath("rss").build();
+                Uri uri = uri = builder.scheme("content").authority(authority).appendPath("rss").build();
 
                 ContentValues c = new ContentValues();
                 c.put("choisi", 1);
-                //c.put("date_choisi", currentDate);
-                contentResolver.update(uri, c, "title = ?", new String [] {title.getText().toString()});
+
+                contentResolver.update(uri, c, "title= ?", new String [] {title.getText().toString()});
                 getFragmentManager().popBackStack();
 
             }
@@ -141,7 +139,6 @@ public class UnRSS extends Fragment {
 
                 ContentValues c = new ContentValues();
                 c.put("choisi", 0);
-                c.put("date_choisi", "");
                 contentResolver.update(uri, c, "title = ?", new String [] {title.getText().toString()});
                 getFragmentManager().popBackStack();
             }
