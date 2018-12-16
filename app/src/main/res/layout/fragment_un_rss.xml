@@ -5,120 +5,89 @@
     android:orientation="vertical"
     tools:context=".UnRSS">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="73dp"
-        android:orientation="horizontal">
+        android:layout_alignParentTop="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="title :" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="115dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="link : " />
-
-        <TextView
-            android:id="@+id/link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="224dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="description :" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="93dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/maListe"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ajouter à ma liste" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="73dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="93dp"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Link"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/link"
+                android:layout_width="match_parent"
+                android:layout_height="96dp" />
 
-        <Button
-            android:id="@+id/supprimer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Supprimer de ma liste" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="107dp" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/maListe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ajouter à ma liste" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="19dp"
-        android:orientation="horizontal">
+            <Button
+                android:id="@+id/supprimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Supprimer de ma liste" />
 
+            <com.androidclass.stryker.mplrss.MyWebView
+                android:id="@+id/Webview"
+                android:layout_width="match_parent"
+                android:layout_height="308dp"
+                android:layout_gravity="center" />
 
-        <Button
-            android:id="@+id/gotoBrowser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ouvrir l'article" />
+            <Button
+                android:id="@+id/openInWebView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ouvrir dans la WebView" />
 
+            <Button
+                android:id="@+id/gotoBrowser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ouvrir l'article" />
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
 
 
 </RelativeLayout>
