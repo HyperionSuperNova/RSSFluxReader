@@ -44,7 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListeRSSFav.OnFragmentInteractionListener {
     private FragmentManager f;
     ProgressBar pb;
     DownloadManager dm;
@@ -267,8 +267,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final MenuItem item2 = item;
-        final SearchView searchView = (SearchView) item.getActionView();
+        f = getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.accueil:
                 Intent i = new Intent(this, MainActivity.class);
@@ -276,11 +275,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.mes_rss:
-                FragmentTransaction t = f.beginTransaction();
-                ListeRSSFav p = ListeRSSFav.newInstance();
-                t.replace(R.id.liste_fragment_frame, p);
-                t.addToBackStack(null);
-                t.commit();
+                Intent iii = new Intent(MainActivity.this, AfficheRSS.class);
+                iii.putExtra("favori", "favori");
+                startActivity(iii);
                 return true;
 
             case R.id.load:
@@ -316,5 +313,20 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onRSSSelectionFav(String title) {
+        UnRSS u = UnRSS.newInstance(title, true);
+        u.setContentResolver(MainActivity.this);
+        FragmentTransaction t = f.beginTransaction();
+        t.replace(R.id.liste_fragment_frame, u);
+        t.addToBackStack(null);
+        t.commit();
     }
 }

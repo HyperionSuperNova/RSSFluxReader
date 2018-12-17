@@ -23,12 +23,20 @@ public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragment
         setContentView(R.layout.activity_affiche_rss);
         Bundle extras = getIntent().getExtras();
         int id_flux = extras.getInt("id_flux");
+        String fav = extras.getString("favori");
         f = getSupportFragmentManager();
         FragmentTransaction t = f.beginTransaction();
-        ListeRSS p = ListeRSS.newInstance(id_flux);
-        p.setContentResolver(AfficheRSS.this);
-        t.add(R.id.liste_fragment_frame, p);
-        t.commit();
+        if(fav.equals("favori")){
+            ListeRSSFav p = ListeRSSFav.newInstance();
+            t.replace(R.id.liste_fragment_frame, p);
+            t.addToBackStack(null);
+            t.commit();
+        }else {
+            ListeRSS p = ListeRSS.newInstance(id_flux);
+            p.setContentResolver(AfficheRSS.this);
+            t.add(R.id.liste_fragment_frame, p);
+            t.commit();
+        }
     }
 
     @Override

@@ -57,7 +57,7 @@ public class ListeRSSFav extends ListFragment implements LoaderManager.LoaderCal
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.onAttach(getActivity());
-        if (getActivity() instanceof ListeRSS.OnFragmentInteractionListener) {
+        if (getActivity() instanceof ListeRSSFav.OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) getActivity();
         } else {
             throw new RuntimeException(getActivity().toString()
