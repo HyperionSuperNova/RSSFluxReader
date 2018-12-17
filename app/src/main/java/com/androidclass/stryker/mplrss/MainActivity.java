@@ -44,7 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements ListeRSSFav.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
     private FragmentManager f;
     ProgressBar pb;
     DownloadManager dm;
@@ -313,20 +313,5 @@ public class MainActivity extends AppCompatActivity implements ListeRSSFav.OnFra
                 return super.onOptionsItemSelected(item);
 
         }
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onRSSSelectionFav(String title) {
-        UnRSS u = UnRSS.newInstance(title, true);
-        u.setContentResolver(MainActivity.this);
-        FragmentTransaction t = f.beginTransaction();
-        t.replace(R.id.liste_fragment_frame, u);
-        t.addToBackStack(null);
-        t.commit();
     }
 }

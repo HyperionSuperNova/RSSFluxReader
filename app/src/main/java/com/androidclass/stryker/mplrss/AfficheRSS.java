@@ -26,7 +26,7 @@ public class AfficheRSS extends AppCompatActivity implements ListeRSS.OnFragment
         String fav = extras.getString("favori");
         f = getSupportFragmentManager();
         FragmentTransaction t = f.beginTransaction();
-        if(fav.equals("favori")){
+        if(fav != null && fav.equals("favori")){
             ListeRSSFav p = ListeRSSFav.newInstance();
             t.replace(R.id.liste_fragment_frame, p);
             t.addToBackStack(null);
